@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# WordPress initial setup — runs via wpcli service after containers are up
+# WordPress initial setup — runs inside the wpt-wordpress container
 set -euo pipefail
 
 WP="wp --allow-root --path=/var/www/html"
@@ -9,6 +9,12 @@ echo "Waiting for WordPress files..."
 until [ -f /var/www/html/wp-includes/version.php ]; do
     sleep 1
 done
+
+# Install mysql client if missing (needed for wp db check)
+if ! command -v mysqlcheck &>/dev/null; then
+    echo "Installing mysql client..."
+    apt-get update -qq && apt-get install -y -qq default-mysql-client >/dev/null 2>&1
+fi
 
 # Wait for database
 echo "Waiting for database..."
@@ -20,7 +26,7 @@ done
 if ! $WP core is-installed 2>/dev/null; then
     echo "Installing WordPress..."
     $WP core install \
-        --url="https://wpfaker-test.dv" \
+        --url="http://wpfaker-test.dv" \
         --title="WPFaker Test" \
         --admin_user=admin \
         --admin_password=admin \

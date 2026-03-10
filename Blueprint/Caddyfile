@@ -1,4 +1,4 @@
-wpfaker-test.dv {
+:80 {
 	root * /var/www/html
 
 	php_fastcgi wordpress:9000
