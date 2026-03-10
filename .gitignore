@@ -1,0 +1,7 @@
+# Docker runtime (recreated from Blueprint)
+Docker/*
+!Docker/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db

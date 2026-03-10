@@ -1,0 +1,81 @@
+services:
+  wordpress:
+    image: wordpress:6-php8.2-fpm
+    container_name: wpt-wordpress
+    restart: unless-stopped
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wordpress_data:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - wptest
+
+  db:
+    image: mysql:8.0
+    container_name: wpt-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - wptest
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: wpt-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - wordpress_data:/var/www/html:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - wordpress
+    networks:
+      - wptest
+
+  wpcli:
+    image: wordpress:cli
+    container_name: wpt-wpcli
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wordpress_data:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - wptest
+    profiles:
+      - cli
+
+volumes:
+  wordpress_data:
+  db_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  wptest:
+    driver: bridge

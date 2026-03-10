@@ -1,0 +1,1209 @@
+[
+    {
+        "key": "group_69a7432d4dfc0",
+        "title": "Actor",
+        "fields": [
+            {
+                "key": "field_69a7432d05fa8",
+                "label": "First name",
+                "name": "first_name",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "allow_in_bindings": 0,
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_69a7436605fa9",
+                "label": "Last name",
+                "name": "last_name",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "allow_in_bindings": 0,
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_69a7437b05faa",
+                "label": "Stage Name",
+                "name": "stage_name",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "allow_in_bindings": 0,
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_69a744177e27e",
+                "label": "Date of Birth",
+                "name": "date_of_birth",
+                "aria-label": "",
+                "type": "date_picker",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "display_format": "d\/m\/Y",
+                "return_format": "F j, Y",
+                "first_day": 1,
+                "default_to_current_date": 0,
+                "allow_in_bindings": 0
+            },
+            {
+                "key": "field_69a743c105fab",
+                "label": "Movies",
+                "name": "movies",
+                "aria-label": "",
+                "type": "relationship",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "post_type": [
+                    "movie"
+                ],
+                "post_status": [
+                    "publish"
+                ],
+                "taxonomy": "",
+                "filters": [
+                    "search",
+                    "post_type"
+                ],
+                "return_format": "object",
+                "min": "",
+                "max": "",
+                "allow_in_bindings": 0,
+                "elements": "",
+                "bidirectional": 1,
+                "bidirectional_target": [
+                    "field_69a743c105fab"
+                ]
+            },
+            {
+                "key": "field_69aaad2b0651f",
+                "label": "Awards",
+                "name": "awards",
+                "aria-label": "",
+                "type": "repeater",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "layout": "table",
+                "pagination": 0,
+                "min": 0,
+                "max": 0,
+                "collapsed": "",
+                "button_label": "Add Row",
+                "rows_per_page": 20,
+                "sub_fields": [
+                    {
+                        "key": "field_69aab65d06520",
+                        "label": "Award",
+                        "name": "award",
+                        "aria-label": "",
+                        "type": "text",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "default_value": "",
+                        "maxlength": "",
+                        "allow_in_bindings": 0,
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "parent_repeater": "field_69aaad2b0651f"
+                    },
+                    {
+                        "key": "field_69aab67906521",
+                        "label": "Category",
+                        "name": "category",
+                        "aria-label": "",
+                        "type": "text",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "default_value": "",
+                        "maxlength": "",
+                        "allow_in_bindings": 0,
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "parent_repeater": "field_69aaad2b0651f"
+                    },
+                    {
+                        "key": "field_69aab68906522",
+                        "label": "Year",
+                        "name": "year",
+                        "aria-label": "",
+                        "type": "number",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "default_value": "",
+                        "min": "",
+                        "max": "",
+                        "allow_in_bindings": 0,
+                        "placeholder": "",
+                        "step": "",
+                        "prepend": "",
+                        "append": "",
+                        "parent_repeater": "field_69aaad2b0651f"
+                    },
+                    {
+                        "key": "field_69aab69e06523",
+                        "label": "Role\/Character",
+                        "name": "rolecharacter",
+                        "aria-label": "",
+                        "type": "text",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "default_value": "",
+                        "maxlength": "",
+                        "allow_in_bindings": 0,
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "parent_repeater": "field_69aaad2b0651f"
+                    },
+                    {
+                        "key": "field_69aab6ba06524",
+                        "label": "Result",
+                        "name": "result",
+                        "aria-label": "",
+                        "type": "select",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "choices": {
+                            "Won": "Won",
+                            "Nominated": "Nominated"
+                        },
+                        "default_value": false,
+                        "return_format": "value",
+                        "multiple": 0,
+                        "allow_null": 0,
+                        "allow_in_bindings": 0,
+                        "ui": 0,
+                        "ajax": 0,
+                        "placeholder": "",
+                        "create_options": 0,
+                        "save_options": 0,
+                        "parent_repeater": "field_69aaad2b0651f"
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "actor"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0,
+        "display_title": ""
+    },
+    {
+        "key": "group_69a74441efb25",
+        "title": "Director",
+        "fields": [
+            {
+                "key": "field_69a74442cf6e5",
+                "label": "First Name",
+                "name": "first_name",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "allow_in_bindings": 0,
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_69a7445f05a54",
+                "label": "Last Name",
+                "name": "last_name",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "allow_in_bindings": 0,
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_69a7446c05a55",
+                "label": "Movies",
+                "name": "movies",
+                "aria-label": "",
+                "type": "relationship",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "post_type": [
+                    "movie"
+                ],
+                "post_status": [
+                    "publish"
+                ],
+                "taxonomy": "",
+                "filters": [
+                    "search",
+                    "post_type"
+                ],
+                "return_format": "object",
+                "min": "",
+                "max": "",
+                "allow_in_bindings": 0,
+                "elements": "",
+                "bidirectional": 1,
+                "bidirectional_target": [
+                    "field_69a7446c05a55"
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "director"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0,
+        "display_title": ""
+    },
+    {
+        "key": "group_69a73df819eb4",
+        "title": "Movie",
+        "fields": [
+            {
+                "key": "field_69a7462fb3326",
+                "label": "Poster",
+                "name": "poster",
+                "aria-label": "",
+                "type": "image",
+                "instructions": "",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "return_format": "url",
+                "library": "all",
+                "min_width": "",
+                "min_height": "",
+                "min_size": "",
+                "max_width": "",
+                "max_height": "",
+                "max_size": "",
+                "mime_types": "",
+                "allow_in_bindings": 0,
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_69a742a2d4d2e",
+                "label": "Plot",
+                "name": "plot",
+                "aria-label": "",
+                "type": "wysiwyg",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "allow_in_bindings": 0,
+                "tabs": "all",
+                "toolbar": "full",
+                "media_upload": 1,
+                "delay": 0
+            },
+            {
+                "key": "field_69a73f83e026c",
+                "label": "Genre",
+                "name": "genre",
+                "aria-label": "",
+                "type": "taxonomy",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "taxonomy": "genre",
+                "add_term": 1,
+                "save_terms": 1,
+                "load_terms": 0,
+                "return_format": "id",
+                "field_type": "select",
+                "allow_null": 1,
+                "allow_in_bindings": 0,
+                "bidirectional": 0,
+                "multiple": 0,
+                "bidirectional_target": []
+            },
+            {
+                "key": "field_69a742c2d4d2f",
+                "label": "Budget",
+                "name": "budget",
+                "aria-label": "",
+                "type": "number",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "30",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "min": "",
+                "max": "",
+                "allow_in_bindings": 0,
+                "placeholder": "",
+                "step": "",
+                "prepend": "$",
+                "append": "Mio."
+            },
+            {
+                "key": "field_69a73fc4e026d",
+                "label": "Published at",
+                "name": "published_at",
+                "aria-label": "",
+                "type": "date_picker",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "display_format": "d\/m\/Y",
+                "return_format": "F j, Y",
+                "first_day": 1,
+                "default_to_current_date": 0,
+                "allow_in_bindings": 0
+            },
+            {
+                "key": "field_69a740030afd7",
+                "label": "Directors",
+                "name": "directors",
+                "aria-label": "",
+                "type": "relationship",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "post_type": [
+                    "director"
+                ],
+                "post_status": [
+                    "publish"
+                ],
+                "taxonomy": "",
+                "filters": [
+                    "search",
+                    "post_type"
+                ],
+                "return_format": "object",
+                "min": "",
+                "max": "",
+                "allow_in_bindings": 0,
+                "elements": "",
+                "bidirectional": 1,
+                "bidirectional_target": [
+                    "field_69a740030afd7"
+                ]
+            },
+            {
+                "key": "field_69a741c9cddee",
+                "label": "Actors",
+                "name": "actors",
+                "aria-label": "",
+                "type": "relationship",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "post_type": [
+                    "actor"
+                ],
+                "post_status": [
+                    "publish"
+                ],
+                "taxonomy": "",
+                "filters": [
+                    "search",
+                    "post_type"
+                ],
+                "return_format": "object",
+                "min": "",
+                "max": "",
+                "allow_in_bindings": 0,
+                "elements": "",
+                "bidirectional": 1,
+                "bidirectional_target": [
+                    "field_69a741c9cddee"
+                ]
+            },
+            {
+                "key": "field_69a742453d400",
+                "label": "Studios",
+                "name": "studios",
+                "aria-label": "",
+                "type": "relationship",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "post_type": [
+                    "studio"
+                ],
+                "post_status": [
+                    "publish"
+                ],
+                "taxonomy": "",
+                "filters": [
+                    "search",
+                    "post_type"
+                ],
+                "return_format": "object",
+                "min": "",
+                "max": "",
+                "allow_in_bindings": 0,
+                "elements": "",
+                "bidirectional": 1,
+                "bidirectional_target": [
+                    "field_69a742453d400"
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "movie"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0,
+        "display_title": ""
+    },
+    {
+        "key": "group_69a744e46bfed",
+        "title": "Studio",
+        "fields": [
+            {
+                "key": "field_69a755df7c496",
+                "label": "Logo",
+                "name": "logo",
+                "aria-label": "",
+                "type": "image",
+                "instructions": "",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "return_format": "url",
+                "library": "uploadedTo",
+                "min_width": "",
+                "min_height": "",
+                "min_size": "",
+                "max_width": "",
+                "max_height": "",
+                "max_size": "",
+                "mime_types": "",
+                "allow_in_bindings": 0,
+                "preview_size": "medium"
+            },
+            {
+                "key": "field_69a744e4b82ba",
+                "label": "Company Name",
+                "name": "company_name",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "allow_in_bindings": 0,
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_69a74505921ee",
+                "label": "Movies",
+                "name": "movies",
+                "aria-label": "",
+                "type": "relationship",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "post_type": [
+                    "movie"
+                ],
+                "post_status": [
+                    "publish"
+                ],
+                "taxonomy": "",
+                "filters": [
+                    "search",
+                    "post_type"
+                ],
+                "return_format": "object",
+                "min": "",
+                "max": "",
+                "allow_in_bindings": 0,
+                "elements": "",
+                "bidirectional": 1,
+                "bidirectional_target": [
+                    "field_69a74505921ee"
+                ]
+            },
+            {
+                "key": "field_69aaabc6404a5",
+                "label": "Address",
+                "name": "address",
+                "aria-label": "",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "33",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "allow_in_bindings": 0,
+                "rows": "",
+                "placeholder": "",
+                "new_lines": ""
+            },
+            {
+                "key": "field_69aaac0a404a6",
+                "label": "Map",
+                "name": "map",
+                "aria-label": "",
+                "type": "google_map",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": [
+                    [
+                        {
+                            "field": "field_69aaabc6404a5",
+                            "operator": "!=empty"
+                        }
+                    ]
+                ],
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "center_lat": "",
+                "center_lng": "",
+                "zoom": "",
+                "height": "",
+                "allow_in_bindings": 0
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "studio"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0,
+        "display_title": ""
+    },
+    {
+        "key": "taxonomy_69a74302baa48",
+        "title": "Genres",
+        "menu_order": 0,
+        "active": true,
+        "taxonomy": "genre",
+        "object_type": [
+            "movie"
+        ],
+        "advanced_configuration": 0,
+        "import_source": "",
+        "import_date": "",
+        "labels": {
+            "name": "Genres",
+            "singular_name": "Genre",
+            "menu_name": "Genres",
+            "all_items": "All Genres",
+            "edit_item": "Edit Genre",
+            "view_item": "View Genre",
+            "update_item": "Update Genre",
+            "add_new_item": "Add New Genre",
+            "new_item_name": "New Genre Name",
+            "search_items": "Search Genres",
+            "popular_items": "Popular Genres",
+            "separate_items_with_commas": "Separate genres with commas",
+            "add_or_remove_items": "Add or remove genres",
+            "choose_from_most_used": "Choose from the most used genres",
+            "most_used": "",
+            "not_found": "No genres found",
+            "no_terms": "No genres",
+            "name_field_description": "",
+            "slug_field_description": "",
+            "desc_field_description": "",
+            "items_list_navigation": "Genres list navigation",
+            "items_list": "Genres list",
+            "back_to_items": "← Go to genres",
+            "item_link": "Genre Link",
+            "item_link_description": "A link to a genre"
+        },
+        "description": "",
+        "capabilities": {
+            "manage_terms": "manage_categories",
+            "edit_terms": "manage_categories",
+            "delete_terms": "manage_categories",
+            "assign_terms": "edit_posts"
+        },
+        "public": 1,
+        "publicly_queryable": 1,
+        "hierarchical": 0,
+        "show_ui": 1,
+        "show_in_menu": 1,
+        "show_in_nav_menus": 1,
+        "show_in_rest": 1,
+        "rest_base": "",
+        "rest_namespace": "wp\/v2",
+        "rest_controller_class": "WP_REST_Terms_Controller",
+        "show_tagcloud": 1,
+        "show_in_quick_edit": 1,
+        "show_admin_column": 0,
+        "rewrite": {
+            "permalink_rewrite": "taxonomy_key",
+            "with_front": "1",
+            "rewrite_hierarchical": "0"
+        },
+        "query_var": "post_type_key",
+        "query_var_name": "",
+        "default_term": {
+            "default_term_enabled": "0"
+        },
+        "sort": 0,
+        "meta_box": "default",
+        "meta_box_cb": "",
+        "meta_box_sanitize_cb": ""
+    },
+    {
+        "key": "post_type_69a74067e887f",
+        "title": "Actors",
+        "menu_order": 0,
+        "active": true,
+        "post_type": "actor",
+        "advanced_configuration": true,
+        "import_source": "",
+        "import_date": "",
+        "labels": {
+            "name": "Actors",
+            "singular_name": "Actor",
+            "menu_name": "Actors",
+            "all_items": "All Actors",
+            "edit_item": "Edit Actor",
+            "view_item": "View Actor",
+            "view_items": "View Actors",
+            "add_new_item": "Add New Actor",
+            "add_new": "Add New Actor",
+            "new_item": "New Actor",
+            "parent_item_colon": "Parent Actor:",
+            "search_items": "Search Actors",
+            "not_found": "No actors found",
+            "not_found_in_trash": "No actors found in Trash",
+            "archives": "Actor Archives",
+            "attributes": "Actor Attributes",
+            "featured_image": "",
+            "set_featured_image": "",
+            "remove_featured_image": "",
+            "use_featured_image": "",
+            "insert_into_item": "Insert into actor",
+            "uploaded_to_this_item": "Uploaded to this actor",
+            "filter_items_list": "Filter actors list",
+            "filter_by_date": "Filter actors by date",
+            "items_list_navigation": "Actors list navigation",
+            "items_list": "Actors list",
+            "item_published": "Actor published.",
+            "item_published_privately": "Actor published privately.",
+            "item_reverted_to_draft": "Actor reverted to draft.",
+            "item_scheduled": "Actor scheduled.",
+            "item_updated": "Actor updated.",
+            "item_link": "Actor Link",
+            "item_link_description": "A link to a actor."
+        },
+        "description": "",
+        "public": true,
+        "hierarchical": false,
+        "exclude_from_search": false,
+        "publicly_queryable": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "admin_menu_parent": "",
+        "show_in_admin_bar": true,
+        "show_in_nav_menus": true,
+        "show_in_rest": true,
+        "rest_base": "",
+        "rest_namespace": "wp\/v2",
+        "rest_controller_class": "WP_REST_Posts_Controller",
+        "menu_position": "",
+        "menu_icon": {
+            "type": "dashicons",
+            "value": "dashicons-businessman"
+        },
+        "rename_capabilities": false,
+        "singular_capability_name": "post",
+        "plural_capability_name": "posts",
+        "supports": [
+            "thumbnail",
+            "custom-fields"
+        ],
+        "taxonomies": "",
+        "has_archive": false,
+        "has_archive_slug": "",
+        "rewrite": {
+            "permalink_rewrite": "post_type_key",
+            "with_front": "1",
+            "feeds": "0",
+            "pages": "1"
+        },
+        "query_var": "post_type_key",
+        "query_var_name": "",
+        "can_export": true,
+        "delete_with_user": false,
+        "register_meta_box_cb": "",
+        "enter_title_here": ""
+    },
+    {
+        "key": "post_type_69a7402f71a8e",
+        "title": "Directors",
+        "menu_order": 0,
+        "active": true,
+        "post_type": "director",
+        "advanced_configuration": true,
+        "import_source": "",
+        "import_date": "",
+        "labels": {
+            "name": "Directors",
+            "singular_name": "Director",
+            "menu_name": "Directors",
+            "all_items": "All Directors",
+            "edit_item": "Edit Director",
+            "view_item": "View Director",
+            "view_items": "View Directors",
+            "add_new_item": "Add New Director",
+            "add_new": "Add New Director",
+            "new_item": "New Director",
+            "parent_item_colon": "Parent Director:",
+            "search_items": "Search Directors",
+            "not_found": "No directors found",
+            "not_found_in_trash": "No directors found in Trash",
+            "archives": "Director Archives",
+            "attributes": "Director Attributes",
+            "featured_image": "",
+            "set_featured_image": "",
+            "remove_featured_image": "",
+            "use_featured_image": "",
+            "insert_into_item": "Insert into director",
+            "uploaded_to_this_item": "Uploaded to this director",
+            "filter_items_list": "Filter directors list",
+            "filter_by_date": "Filter directors by date",
+            "items_list_navigation": "Directors list navigation",
+            "items_list": "Directors list",
+            "item_published": "Director published.",
+            "item_published_privately": "Director published privately.",
+            "item_reverted_to_draft": "Director reverted to draft.",
+            "item_scheduled": "Director scheduled.",
+            "item_updated": "Director updated.",
+            "item_link": "Director Link",
+            "item_link_description": "A link to a director."
+        },
+        "description": "",
+        "public": true,
+        "hierarchical": false,
+        "exclude_from_search": false,
+        "publicly_queryable": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "admin_menu_parent": "",
+        "show_in_admin_bar": true,
+        "show_in_nav_menus": true,
+        "show_in_rest": true,
+        "rest_base": "",
+        "rest_namespace": "wp\/v2",
+        "rest_controller_class": "WP_REST_Posts_Controller",
+        "menu_position": "",
+        "menu_icon": {
+            "type": "dashicons",
+            "value": "dashicons-megaphone"
+        },
+        "rename_capabilities": false,
+        "singular_capability_name": "post",
+        "plural_capability_name": "posts",
+        "supports": [
+            "thumbnail",
+            "custom-fields"
+        ],
+        "taxonomies": "",
+        "has_archive": false,
+        "has_archive_slug": "",
+        "rewrite": {
+            "permalink_rewrite": "post_type_key",
+            "with_front": "1",
+            "feeds": "0",
+            "pages": "1"
+        },
+        "query_var": "post_type_key",
+        "query_var_name": "",
+        "can_export": true,
+        "delete_with_user": false,
+        "register_meta_box_cb": "",
+        "enter_title_here": ""
+    },
+    {
+        "key": "post_type_69a73e963ff69",
+        "title": "Movies",
+        "menu_order": 0,
+        "active": true,
+        "post_type": "movie",
+        "advanced_configuration": true,
+        "import_source": "",
+        "import_date": "",
+        "labels": {
+            "name": "Movies",
+            "singular_name": "Movie",
+            "menu_name": "Movies",
+            "all_items": "All Movies",
+            "edit_item": "Edit Movie",
+            "view_item": "View Movie",
+            "view_items": "View Movies",
+            "add_new_item": "Add New Movie",
+            "add_new": "Add New Movie",
+            "new_item": "New Movie",
+            "parent_item_colon": "Parent Movie:",
+            "search_items": "Search Movies",
+            "not_found": "No movies found",
+            "not_found_in_trash": "No movies found in Trash",
+            "archives": "Movie Archives",
+            "attributes": "Movie Attributes",
+            "featured_image": "",
+            "set_featured_image": "",
+            "remove_featured_image": "",
+            "use_featured_image": "",
+            "insert_into_item": "Insert into movie",
+            "uploaded_to_this_item": "Uploaded to this movie",
+            "filter_items_list": "Filter movies list",
+            "filter_by_date": "Filter movies by date",
+            "items_list_navigation": "Movies list navigation",
+            "items_list": "Movies list",
+            "item_published": "Movie published.",
+            "item_published_privately": "Movie published privately.",
+            "item_reverted_to_draft": "Movie reverted to draft.",
+            "item_scheduled": "Movie scheduled.",
+            "item_updated": "Movie updated.",
+            "item_link": "Movie Link",
+            "item_link_description": "A link to a movie."
+        },
+        "description": "",
+        "public": true,
+        "hierarchical": false,
+        "exclude_from_search": false,
+        "publicly_queryable": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "admin_menu_parent": "",
+        "show_in_admin_bar": true,
+        "show_in_nav_menus": true,
+        "show_in_rest": true,
+        "rest_base": "",
+        "rest_namespace": "wp\/v2",
+        "rest_controller_class": "WP_REST_Posts_Controller",
+        "menu_position": "",
+        "menu_icon": {
+            "type": "dashicons",
+            "value": "dashicons-video-alt"
+        },
+        "rename_capabilities": false,
+        "singular_capability_name": "post",
+        "plural_capability_name": "posts",
+        "supports": [
+            "title",
+            "custom-fields"
+        ],
+        "taxonomies": "",
+        "has_archive": false,
+        "has_archive_slug": "",
+        "rewrite": {
+            "permalink_rewrite": "post_type_key",
+            "with_front": "1",
+            "feeds": "0",
+            "pages": "1"
+        },
+        "query_var": "post_type_key",
+        "query_var_name": "",
+        "can_export": true,
+        "delete_with_user": false,
+        "register_meta_box_cb": "",
+        "enter_title_here": ""
+    },
+    {
+        "key": "post_type_69a74092064c5",
+        "title": "Studios",
+        "menu_order": 0,
+        "active": true,
+        "post_type": "studio",
+        "advanced_configuration": true,
+        "import_source": "",
+        "import_date": "",
+        "labels": {
+            "name": "Studios",
+            "singular_name": "Studio",
+            "menu_name": "Studio",
+            "all_items": "All Studio",
+            "edit_item": "Edit Studio",
+            "view_item": "View Studio",
+            "view_items": "View Studio",
+            "add_new_item": "Add New Studio",
+            "add_new": "Add New Studio",
+            "new_item": "New Studio",
+            "parent_item_colon": "Parent Studio:",
+            "search_items": "Search Studio",
+            "not_found": "No studio found",
+            "not_found_in_trash": "No studio found in Trash",
+            "archives": "Studio Archives",
+            "attributes": "Studio Attributes",
+            "featured_image": "",
+            "set_featured_image": "",
+            "remove_featured_image": "",
+            "use_featured_image": "",
+            "insert_into_item": "Insert into studio",
+            "uploaded_to_this_item": "Uploaded to this studio",
+            "filter_items_list": "Filter studio list",
+            "filter_by_date": "Filter studio by date",
+            "items_list_navigation": "Studio list navigation",
+            "items_list": "Studio list",
+            "item_published": "Studio published.",
+            "item_published_privately": "Studio published privately.",
+            "item_reverted_to_draft": "Studio reverted to draft.",
+            "item_scheduled": "Studio scheduled.",
+            "item_updated": "Studio updated.",
+            "item_link": "Studio Link",
+            "item_link_description": "A link to a studio."
+        },
+        "description": "",
+        "public": true,
+        "hierarchical": false,
+        "exclude_from_search": false,
+        "publicly_queryable": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "admin_menu_parent": "",
+        "show_in_admin_bar": true,
+        "show_in_nav_menus": true,
+        "show_in_rest": true,
+        "rest_base": "",
+        "rest_namespace": "wp\/v2",
+        "rest_controller_class": "WP_REST_Posts_Controller",
+        "menu_position": "",
+        "menu_icon": {
+            "type": "dashicons",
+            "value": "dashicons-video-alt2"
+        },
+        "rename_capabilities": false,
+        "singular_capability_name": "post",
+        "plural_capability_name": "posts",
+        "supports": [
+            "custom-fields"
+        ],
+        "taxonomies": "",
+        "has_archive": false,
+        "has_archive_slug": "",
+        "rewrite": {
+            "permalink_rewrite": "post_type_key",
+            "with_front": "1",
+            "feeds": "0",
+            "pages": "1"
+        },
+        "query_var": "post_type_key",
+        "query_var_name": "",
+        "can_export": true,
+        "delete_with_user": false,
+        "register_meta_box_cb": "",
+        "enter_title_here": ""
+    }
+]

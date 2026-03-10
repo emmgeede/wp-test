@@ -1,0 +1,59 @@
+[
+    {
+        "$schema": "https://schemas.metabox.io/relationships.json",
+        "id": "movies-to-actors",
+        "title": "Movies to Actors",
+        "from": {
+            "object_type": "post",
+            "post_type": ["movie"],
+            "meta_box": {
+                "title": "Actors"
+            }
+        },
+        "to": {
+            "object_type": "post",
+            "post_type": ["actor"],
+            "meta_box": {
+                "title": "Movies"
+            }
+        }
+    },
+    {
+        "$schema": "https://schemas.metabox.io/relationships.json",
+        "id": "movies-to-directors",
+        "title": "Movies to Directors",
+        "from": {
+            "object_type": "post",
+            "post_type": ["movie"],
+            "meta_box": {
+                "title": "Directors"
+            }
+        },
+        "to": {
+            "object_type": "post",
+            "post_type": ["director"],
+            "meta_box": {
+                "title": "Movies"
+            }
+        }
+    },
+    {
+        "$schema": "https://schemas.metabox.io/relationships.json",
+        "id": "movies-to-studios",
+        "title": "Movies to Studios",
+        "from": {
+            "object_type": "post",
+            "post_type": ["movie"],
+            "meta_box": {
+                "title": "Studios"
+            }
+        },
+        "to": {
+            "object_type": "post",
+            "post_type": ["studio"],
+            "meta_box": {
+                "title": "Movies"
+            }
+        }
+    }
+]

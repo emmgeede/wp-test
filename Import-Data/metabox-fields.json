@@ -1,0 +1,195 @@
+[
+    {
+        "$schema": "https://schemas.metabox.io/field-group.json",
+        "id": "actor-fields",
+        "title": "Actor",
+        "post_types": ["actor"],
+        "context": "normal",
+        "style": "default",
+        "priority": "high",
+        "fields": [
+            {
+                "id": "first_name",
+                "type": "text",
+                "name": "First name",
+                "required": true,
+                "columns": 4
+            },
+            {
+                "id": "last_name",
+                "type": "text",
+                "name": "Last name",
+                "required": true,
+                "columns": 4
+            },
+            {
+                "id": "stage_name",
+                "type": "text",
+                "name": "Stage Name",
+                "columns": 4
+            },
+            {
+                "id": "date_of_birth",
+                "type": "date",
+                "name": "Date of Birth",
+                "columns": 4,
+                "js_options": {
+                    "dateFormat": "dd/mm/yy"
+                }
+            },
+            {
+                "id": "awards",
+                "type": "group",
+                "name": "Awards",
+                "clone": true,
+                "sort_clone": true,
+                "collapsible": true,
+                "group_title": "{award} ({year})",
+                "add_button": "Add Row",
+                "fields": [
+                    {
+                        "id": "award",
+                        "type": "text",
+                        "name": "Award"
+                    },
+                    {
+                        "id": "category",
+                        "type": "text",
+                        "name": "Category"
+                    },
+                    {
+                        "id": "year",
+                        "type": "number",
+                        "name": "Year"
+                    },
+                    {
+                        "id": "rolecharacter",
+                        "type": "text",
+                        "name": "Role/Character"
+                    },
+                    {
+                        "id": "result",
+                        "type": "select",
+                        "name": "Result",
+                        "options": {
+                            "Won": "Won",
+                            "Nominated": "Nominated"
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "$schema": "https://schemas.metabox.io/field-group.json",
+        "id": "director-fields",
+        "title": "Director",
+        "post_types": ["director"],
+        "context": "normal",
+        "style": "default",
+        "priority": "high",
+        "fields": [
+            {
+                "id": "first_name",
+                "type": "text",
+                "name": "First Name",
+                "required": true,
+                "columns": 4
+            },
+            {
+                "id": "last_name",
+                "type": "text",
+                "name": "Last Name",
+                "required": true,
+                "columns": 4
+            }
+        ]
+    },
+    {
+        "$schema": "https://schemas.metabox.io/field-group.json",
+        "id": "movie-fields",
+        "title": "Movie",
+        "post_types": ["movie"],
+        "context": "normal",
+        "style": "default",
+        "priority": "high",
+        "fields": [
+            {
+                "id": "poster",
+                "type": "single_image",
+                "name": "Poster",
+                "required": true
+            },
+            {
+                "id": "plot",
+                "type": "wysiwyg",
+                "name": "Plot",
+                "options": {
+                    "textarea_rows": 10,
+                    "media_buttons": true
+                }
+            },
+            {
+                "id": "genre",
+                "type": "taxonomy_advanced",
+                "name": "Genre",
+                "taxonomy": ["genre"],
+                "field_type": "select_advanced",
+                "multiple": false,
+                "add_new": true
+            },
+            {
+                "id": "budget",
+                "type": "number",
+                "name": "Budget",
+                "columns": 4,
+                "prepend": "$",
+                "append": "Mio."
+            },
+            {
+                "id": "published_at",
+                "type": "date",
+                "name": "Published at",
+                "js_options": {
+                    "dateFormat": "dd/mm/yy"
+                }
+            }
+        ]
+    },
+    {
+        "$schema": "https://schemas.metabox.io/field-group.json",
+        "id": "studio-fields",
+        "title": "Studio",
+        "post_types": ["studio"],
+        "context": "normal",
+        "style": "default",
+        "priority": "high",
+        "fields": [
+            {
+                "id": "logo",
+                "type": "single_image",
+                "name": "Logo",
+                "required": true
+            },
+            {
+                "id": "company_name",
+                "type": "text",
+                "name": "Company Name",
+                "required": true
+            },
+            {
+                "id": "address",
+                "type": "textarea",
+                "name": "Address",
+                "columns": 4
+            },
+            {
+                "id": "map",
+                "type": "osm",
+                "name": "Map",
+                "address_field": "address",
+                "visible": ["address", "!=", ""]
+            }
+        ]
+    }
+]

@@ -1,0 +1,1 @@
+const d=(e="yyyy-mm-dd")=>{var t=new Date,y=String(t.getDate()).padStart(2,"0"),a=String(t.getMonth()+1).padStart(2,"0"),r=t.getFullYear();switch(e){default:case"yyyy-mm-dd":return r+"-"+a+"-"+y;case"dd/mm/yyyy":return a+"/"+y+"/"+r}};export{d as t};

@@ -1,0 +1,481 @@
+{
+  "post_types": [
+    {
+      "id": 1,
+      "slug": "actor",
+      "status": "publish",
+      "labels": {
+        "name": "Actors",
+        "singular_name": "Actor",
+        "add_new": "Add New",
+        "add_new_item": "Add New Actor",
+        "edit_item": "Edit Actor",
+        "new_item": "New Actor",
+        "view_item": "View Actor",
+        "search_items": "Search Actors",
+        "not_found": "No actors found",
+        "not_found_in_trash": "No actors found in Trash",
+        "all_items": "All Actors",
+        "menu_name": "Actors"
+      },
+      "args": {
+        "name": "Actors",
+        "slug": "actor",
+        "public": true,
+        "publicly_queryable": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "show_in_nav_menus": true,
+        "show_in_rest": true,
+        "query_var": true,
+        "rewrite": {
+          "slug": "actor"
+        },
+        "capability_type": "post",
+        "has_archive": false,
+        "hierarchical": false,
+        "menu_position": null,
+        "menu_icon": "dashicons-businessman",
+        "supports": [
+          "thumbnail",
+          "custom-fields"
+        ]
+      },
+      "meta_fields": [
+        {
+          "title": "First Name",
+          "name": "first_name",
+          "object_type": "field",
+          "type": "text",
+          "is_required": true,
+          "default_val": "",
+          "description": ""
+        },
+        {
+          "title": "Last Name",
+          "name": "last_name",
+          "object_type": "field",
+          "type": "text",
+          "is_required": true,
+          "default_val": "",
+          "description": ""
+        },
+        {
+          "title": "Stage Name",
+          "name": "stage_name",
+          "object_type": "field",
+          "type": "text",
+          "is_required": false,
+          "default_val": "",
+          "description": ""
+        },
+        {
+          "title": "Date of Birth",
+          "name": "date_of_birth",
+          "object_type": "field",
+          "type": "date",
+          "is_required": false,
+          "is_timestamp": false,
+          "default_val": "",
+          "description": ""
+        },
+        {
+          "title": "Awards",
+          "name": "awards",
+          "object_type": "field",
+          "type": "repeater",
+          "is_required": false,
+          "default_val": "",
+          "description": "",
+          "repeater-fields": [
+            {
+              "title": "Award",
+              "name": "award",
+              "object_type": "field",
+              "type": "text",
+              "is_required": false,
+              "default_val": "",
+              "description": ""
+            },
+            {
+              "title": "Category",
+              "name": "category",
+              "object_type": "field",
+              "type": "text",
+              "is_required": false,
+              "default_val": "",
+              "description": ""
+            },
+            {
+              "title": "Year",
+              "name": "year",
+              "object_type": "field",
+              "type": "number",
+              "is_required": false,
+              "min_value": 1900,
+              "max_value": 2030,
+              "step_value": 1,
+              "default_val": "",
+              "description": ""
+            },
+            {
+              "title": "Role / Character",
+              "name": "rolecharacter",
+              "object_type": "field",
+              "type": "text",
+              "is_required": false,
+              "default_val": "",
+              "description": ""
+            },
+            {
+              "title": "Result",
+              "name": "result",
+              "object_type": "field",
+              "type": "select",
+              "is_required": false,
+              "default_val": "",
+              "description": "",
+              "options": [
+                {
+                  "key": "won",
+                  "value": "Won"
+                },
+                {
+                  "key": "nominated",
+                  "value": "Nominated"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "director",
+      "status": "publish",
+      "labels": {
+        "name": "Directors",
+        "singular_name": "Director",
+        "add_new": "Add New",
+        "add_new_item": "Add New Director",
+        "edit_item": "Edit Director",
+        "new_item": "New Director",
+        "view_item": "View Director",
+        "search_items": "Search Directors",
+        "not_found": "No directors found",
+        "not_found_in_trash": "No directors found in Trash",
+        "all_items": "All Directors",
+        "menu_name": "Directors"
+      },
+      "args": {
+        "name": "Directors",
+        "slug": "director",
+        "public": true,
+        "publicly_queryable": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "show_in_nav_menus": true,
+        "show_in_rest": true,
+        "query_var": true,
+        "rewrite": {
+          "slug": "director"
+        },
+        "capability_type": "post",
+        "has_archive": false,
+        "hierarchical": false,
+        "menu_position": null,
+        "menu_icon": "dashicons-megaphone",
+        "supports": [
+          "thumbnail",
+          "custom-fields"
+        ]
+      },
+      "meta_fields": [
+        {
+          "title": "First Name",
+          "name": "first_name",
+          "object_type": "field",
+          "type": "text",
+          "is_required": true,
+          "default_val": "",
+          "description": ""
+        },
+        {
+          "title": "Last Name",
+          "name": "last_name",
+          "object_type": "field",
+          "type": "text",
+          "is_required": true,
+          "default_val": "",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "movie",
+      "status": "publish",
+      "labels": {
+        "name": "Movies",
+        "singular_name": "Movie",
+        "add_new": "Add New",
+        "add_new_item": "Add New Movie",
+        "edit_item": "Edit Movie",
+        "new_item": "New Movie",
+        "view_item": "View Movie",
+        "search_items": "Search Movies",
+        "not_found": "No movies found",
+        "not_found_in_trash": "No movies found in Trash",
+        "all_items": "All Movies",
+        "menu_name": "Movies"
+      },
+      "args": {
+        "name": "Movies",
+        "slug": "movie",
+        "public": true,
+        "publicly_queryable": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "show_in_nav_menus": true,
+        "show_in_rest": true,
+        "query_var": true,
+        "rewrite": {
+          "slug": "movie"
+        },
+        "capability_type": "post",
+        "has_archive": false,
+        "hierarchical": false,
+        "menu_position": null,
+        "menu_icon": "dashicons-video-alt",
+        "supports": [
+          "title",
+          "custom-fields"
+        ]
+      },
+      "meta_fields": [
+        {
+          "title": "Poster",
+          "name": "poster",
+          "object_type": "field",
+          "type": "media",
+          "is_required": false,
+          "value_format": "both",
+          "default_val": "",
+          "description": ""
+        },
+        {
+          "title": "Plot",
+          "name": "plot",
+          "object_type": "field",
+          "type": "wysiwyg",
+          "is_required": false,
+          "default_val": "",
+          "description": ""
+        },
+        {
+          "title": "Budget",
+          "name": "budget",
+          "object_type": "field",
+          "type": "number",
+          "is_required": false,
+          "min_value": 0,
+          "max_value": "",
+          "step_value": 1,
+          "default_val": "",
+          "description": ""
+        },
+        {
+          "title": "Published At",
+          "name": "published_at",
+          "object_type": "field",
+          "type": "date",
+          "is_required": false,
+          "is_timestamp": false,
+          "default_val": "",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "studio",
+      "status": "publish",
+      "labels": {
+        "name": "Studios",
+        "singular_name": "Studio",
+        "add_new": "Add New",
+        "add_new_item": "Add New Studio",
+        "edit_item": "Edit Studio",
+        "new_item": "New Studio",
+        "view_item": "View Studio",
+        "search_items": "Search Studios",
+        "not_found": "No studios found",
+        "not_found_in_trash": "No studios found in Trash",
+        "all_items": "All Studios",
+        "menu_name": "Studios"
+      },
+      "args": {
+        "name": "Studios",
+        "slug": "studio",
+        "public": true,
+        "publicly_queryable": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "show_in_nav_menus": true,
+        "show_in_rest": true,
+        "query_var": true,
+        "rewrite": {
+          "slug": "studio"
+        },
+        "capability_type": "post",
+        "has_archive": false,
+        "hierarchical": false,
+        "menu_position": null,
+        "menu_icon": "dashicons-video-alt2",
+        "supports": [
+          "custom-fields"
+        ]
+      },
+      "meta_fields": [
+        {
+          "title": "Logo",
+          "name": "logo",
+          "object_type": "field",
+          "type": "media",
+          "is_required": false,
+          "value_format": "both",
+          "default_val": "",
+          "description": ""
+        },
+        {
+          "title": "Company Name",
+          "name": "company_name",
+          "object_type": "field",
+          "type": "text",
+          "is_required": true,
+          "default_val": "",
+          "description": ""
+        },
+        {
+          "title": "Address",
+          "name": "address",
+          "object_type": "field",
+          "type": "textarea",
+          "is_required": false,
+          "default_val": "",
+          "description": ""
+        }
+      ]
+    }
+  ],
+  "taxonomies": [
+    {
+      "id": 5,
+      "slug": "genre",
+      "status": "publish",
+      "object_type": [
+        "movie"
+      ],
+      "labels": {
+        "name": "Genres",
+        "singular_name": "Genre",
+        "add_new_item": "Add New Genre",
+        "new_item_name": "New Genre Name",
+        "edit_item": "Edit Genre",
+        "view_item": "View Genre",
+        "update_item": "Update Genre",
+        "search_items": "Search Genres",
+        "not_found": "No genres found",
+        "all_items": "All Genres",
+        "menu_name": "Genres",
+        "back_to_items": "Back to Genres"
+      },
+      "args": {
+        "name": "Genres",
+        "slug": "genre",
+        "public": true,
+        "publicly_queryable": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "show_in_nav_menus": true,
+        "show_in_rest": true,
+        "show_tagcloud": true,
+        "show_in_quick_edit": true,
+        "show_admin_column": true,
+        "hierarchical": false,
+        "query_var": true,
+        "rewrite": {
+          "slug": "genre"
+        }
+      },
+      "meta_fields": []
+    }
+  ],
+  "meta_boxes": [],
+  "relations": [
+    {
+      "id": 6,
+      "slug": "",
+      "status": "relation",
+      "labels": {},
+      "args": {
+        "name": "Movies to Actors",
+        "type": "many_to_many",
+        "parent_object": "posts::movie",
+        "child_object": "posts::actor",
+        "parent_control": true,
+        "child_control": true,
+        "parent_manager": true,
+        "child_manager": true,
+        "db_table": "",
+        "parent_rel_name": "Related Actors",
+        "child_rel_name": "Related Movies",
+        "is_single_post": false
+      },
+      "meta_fields": []
+    },
+    {
+      "id": 7,
+      "slug": "",
+      "status": "relation",
+      "labels": {},
+      "args": {
+        "name": "Movies to Directors",
+        "type": "many_to_many",
+        "parent_object": "posts::movie",
+        "child_object": "posts::director",
+        "parent_control": true,
+        "child_control": true,
+        "parent_manager": true,
+        "child_manager": true,
+        "db_table": "",
+        "parent_rel_name": "Related Directors",
+        "child_rel_name": "Related Movies",
+        "is_single_post": false
+      },
+      "meta_fields": []
+    },
+    {
+      "id": 8,
+      "slug": "",
+      "status": "relation",
+      "labels": {},
+      "args": {
+        "name": "Movies to Studios",
+        "type": "many_to_many",
+        "parent_object": "posts::movie",
+        "child_object": "posts::studio",
+        "parent_control": true,
+        "child_control": true,
+        "parent_manager": true,
+        "child_manager": true,
+        "db_table": "",
+        "parent_rel_name": "Related Studios",
+        "child_rel_name": "Related Movies",
+        "is_single_post": false
+      },
+      "meta_fields": []
+    }
+  ]
+}

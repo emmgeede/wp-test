@@ -1,0 +1,40 @@
+<?php
+
+namespace ACPT\Core\CQRS\Query;
+
+use ACPT\Utils\PHP\Language;
+use Translation_Entry;
+
+class FetchLanguagesQuery implements QueryInterface
+{
+	/**
+	 * @inheritDoc
+	 */
+	public function execute()
+	{
+		$entries = [
+			'languages' => [],
+			'translations' => [],
+		];
+
+		$languages = Language::supported();
+
+		foreach ($languages as $languageCode){
+            $entries['languages'][] = [
+                'value' => $languageCode,
+                'label' => Language::getLabel($languageCode),
+            ];
+        }
+
+		usort($entries['languages'], function ($a, $b) {
+			return strcmp($a['label'], $b['label']);
+		});
+
+		/** @var Translation_Entry $entry */
+		foreach($GLOBALS['l10n'][ACPT_PLUGIN_NAME]->entries as $entry){
+			$entries['translations'][$entry->key()] = $entry->translations[0];
+		}
+
+		return $entries;
+	}
+}

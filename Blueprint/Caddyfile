@@ -1,0 +1,18 @@
+wpfaker-test.dv {
+	root * /var/www/html
+
+	php_fastcgi wordpress:9000
+
+	file_server
+
+	encode gzip
+
+	@blocked {
+		path /xmlrpc.php
+	}
+	respond @blocked 403
+
+	log {
+		output stdout
+	}
+}
