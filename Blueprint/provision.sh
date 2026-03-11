@@ -69,10 +69,21 @@ $WP eval "
     \$groups = json_decode(\$json, true);
     if (\$groups === null) { echo 'ERROR: Invalid JSON in ACF export'; exit(1); }
     if (isset(\$groups['key'])) { \$groups = [\$groups]; }
-    foreach (\$groups as \$group) {
-        acf_import_field_group(\$group);
+    \$counts = ['group' => 0, 'post_type' => 0, 'taxonomy' => 0];
+    foreach (\$groups as \$item) {
+        \$key = \$item['key'] ?? '';
+        if (str_starts_with(\$key, 'post_type_') && function_exists('acf_import_post_type')) {
+            acf_import_post_type(\$item);
+            \$counts['post_type']++;
+        } elseif (str_starts_with(\$key, 'taxonomy_') && function_exists('acf_import_taxonomy')) {
+            acf_import_taxonomy(\$item);
+            \$counts['taxonomy']++;
+        } else {
+            acf_import_field_group(\$item);
+            \$counts['group']++;
+        }
     }
-    echo count(\$groups) . ' ACF field group(s) imported';
+    echo \$counts['group'] . ' field group(s), ' . \$counts['post_type'] . ' post type(s), ' . \$counts['taxonomy'] . ' taxonomy(ies) imported';
 "
 
 # ---------------------------------------------------------------------------
@@ -240,6 +251,27 @@ echo "Keeping active: advanced-custom-fields-pro"
 if ! $WP plugin is-active advanced-custom-fields-pro 2>/dev/null; then
     $WP plugin activate advanced-custom-fields-pro
 fi
+
+# Install WPfaker based on WPFAKER env var
+case "${WPFAKER:-}" in
+    local)
+        echo "Activating WPfaker (local mount)..."
+        $WP plugin activate wpfaker && echo "  → Activated wpfaker (local)"
+        ;;
+    zip)
+        echo "Installing WPfaker from zip..."
+        WPFAKER_ZIP=$(ls -t /home/emmgee/Projects/wpfaker/dist/wpfaker-*.zip 2>/dev/null | head -1)
+        if [ -z "$WPFAKER_ZIP" ]; then
+            echo "  ✗ No zip found in ~/Projects/wpfaker/dist/ — run 'npm run build' in wpfaker first"
+        else
+            docker cp "$WPFAKER_ZIP" wpt-wordpress:/tmp/wpfaker.zip
+            $WP plugin install /tmp/wpfaker.zip --activate --force && echo "  → Installed wpfaker from $(basename "$WPFAKER_ZIP")"
+        fi
+        ;;
+    *)
+        echo "No WPfaker requested (use WPFAKER=local or WPFAKER=zip)"
+        ;;
+esac
 
 echo "Flushing rewrite rules..."
 $WP rewrite flush --hard

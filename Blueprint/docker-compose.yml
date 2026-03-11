@@ -65,6 +65,13 @@ services:
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - wordpress_data:/var/www/html:ro
+      # Test plugins (Caddy needs these to serve static assets)
+      - ../Testplugins/advanced-custom-fields-pro:/var/www/html/wp-content/plugins/advanced-custom-fields-pro:ro
+      - ../Testplugins/advanced-custom-post-type:/var/www/html/wp-content/plugins/advanced-custom-post-type:ro
+      - ../Testplugins/custom-post-type-ui:/var/www/html/wp-content/plugins/custom-post-type-ui:ro
+      - ../Testplugins/jet-engine:/var/www/html/wp-content/plugins/jet-engine:ro
+      - ../Testplugins/meta-box:/var/www/html/wp-content/plugins/meta-box:ro
+      - ../Testplugins/meta-box-aio:/var/www/html/wp-content/plugins/meta-box-aio:ro
       - caddy_data:/data
       - caddy_config:/config
     depends_on:

@@ -1,0 +1,8 @@
+# Override: mount local WPfaker dev build into containers
+services:
+  wordpress:
+    volumes:
+      - ../../wpfaker:/var/www/html/wp-content/plugins/wpfaker
+  caddy:
+    volumes:
+      - ../../wpfaker:/var/www/html/wp-content/plugins/wpfaker:ro
