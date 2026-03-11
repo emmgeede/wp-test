@@ -7,22 +7,35 @@ import (
 )
 
 // ProjectRoot returns the wp-test project root.
-// It walks up from cwd looking for Blueprint/.
+// It first walks up from cwd looking for Blueprint/.
+// If not found, falls back to ~/Projects/wp-test.
 func ProjectRoot() (string, error) {
+	// Try walking up from cwd
 	dir, err := os.Getwd()
+	if err == nil {
+		d := dir
+		for {
+			if _, err := os.Stat(filepath.Join(d, "Blueprint")); err == nil {
+				return d, nil
+			}
+			parent := filepath.Dir(d)
+			if parent == d {
+				break
+			}
+			d = parent
+		}
+	}
+
+	// Fallback: ~/Projects/wp-test
+	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", err
 	}
-	for {
-		if _, err := os.Stat(filepath.Join(dir, "Blueprint")); err == nil {
-			return dir, nil
-		}
-		parent := filepath.Dir(dir)
-		if parent == dir {
-			return "", fmt.Errorf("could not find wp-test project root (no Blueprint/ directory found)")
-		}
-		dir = parent
+	fallback := filepath.Join(home, "Projects", "wp-test")
+	if _, err := os.Stat(filepath.Join(fallback, "Blueprint")); err == nil {
+		return fallback, nil
 	}
+	return "", fmt.Errorf("could not find wp-test project root (no Blueprint/ directory found)")
 }
 
 type Paths struct {
