@@ -28,9 +28,8 @@
         "show_in_nav_menus": true,
         "show_in_rest": true,
         "query_var": true,
-        "rewrite": {
-          "slug": "actor"
-        },
+        "rewrite": true,
+        "rewrite_slug": "actor",
         "capability_type": "post",
         "has_archive": false,
         "hierarchical": false,
@@ -41,6 +40,191 @@
           "custom-fields"
         ]
       },
+      "meta_fields": []
+    },
+    {
+      "id": 2,
+      "slug": "director",
+      "status": "publish",
+      "labels": {
+        "name": "Directors",
+        "singular_name": "Director",
+        "add_new": "Add New",
+        "add_new_item": "Add New Director",
+        "edit_item": "Edit Director",
+        "new_item": "New Director",
+        "view_item": "View Director",
+        "search_items": "Search Directors",
+        "not_found": "No directors found",
+        "not_found_in_trash": "No directors found in Trash",
+        "all_items": "All Directors",
+        "menu_name": "Directors"
+      },
+      "args": {
+        "name": "Directors",
+        "slug": "director",
+        "public": true,
+        "publicly_queryable": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "show_in_nav_menus": true,
+        "show_in_rest": true,
+        "query_var": true,
+        "rewrite": true,
+        "rewrite_slug": "director",
+        "capability_type": "post",
+        "has_archive": false,
+        "hierarchical": false,
+        "menu_position": null,
+        "menu_icon": "dashicons-megaphone",
+        "supports": [
+          "thumbnail",
+          "custom-fields"
+        ]
+      },
+      "meta_fields": []
+    },
+    {
+      "id": 3,
+      "slug": "movie",
+      "status": "publish",
+      "labels": {
+        "name": "Movies",
+        "singular_name": "Movie",
+        "add_new": "Add New",
+        "add_new_item": "Add New Movie",
+        "edit_item": "Edit Movie",
+        "new_item": "New Movie",
+        "view_item": "View Movie",
+        "search_items": "Search Movies",
+        "not_found": "No movies found",
+        "not_found_in_trash": "No movies found in Trash",
+        "all_items": "All Movies",
+        "menu_name": "Movies"
+      },
+      "args": {
+        "name": "Movies",
+        "slug": "movie",
+        "public": true,
+        "publicly_queryable": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "show_in_nav_menus": true,
+        "show_in_rest": true,
+        "query_var": true,
+        "rewrite": true,
+        "rewrite_slug": "movie",
+        "capability_type": "post",
+        "has_archive": false,
+        "hierarchical": false,
+        "menu_position": null,
+        "menu_icon": "dashicons-video-alt",
+        "supports": [
+          "title",
+          "custom-fields"
+        ]
+      },
+      "meta_fields": []
+    },
+    {
+      "id": 4,
+      "slug": "studio",
+      "status": "publish",
+      "labels": {
+        "name": "Studios",
+        "singular_name": "Studio",
+        "add_new": "Add New",
+        "add_new_item": "Add New Studio",
+        "edit_item": "Edit Studio",
+        "new_item": "New Studio",
+        "view_item": "View Studio",
+        "search_items": "Search Studios",
+        "not_found": "No studios found",
+        "not_found_in_trash": "No studios found in Trash",
+        "all_items": "All Studios",
+        "menu_name": "Studios"
+      },
+      "args": {
+        "name": "Studios",
+        "slug": "studio",
+        "public": true,
+        "publicly_queryable": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "show_in_nav_menus": true,
+        "show_in_rest": true,
+        "query_var": true,
+        "rewrite": true,
+        "rewrite_slug": "studio",
+        "capability_type": "post",
+        "has_archive": false,
+        "hierarchical": false,
+        "menu_position": null,
+        "menu_icon": "dashicons-video-alt2",
+        "supports": [
+          "custom-fields"
+        ]
+      },
+      "meta_fields": []
+    }
+  ],
+  "taxonomies": [
+    {
+      "id": 5,
+      "slug": "genre",
+      "status": "publish",
+      "object_type": [
+        "movie"
+      ],
+      "labels": {
+        "name": "Genres",
+        "singular_name": "Genre",
+        "add_new_item": "Add New Genre",
+        "new_item_name": "New Genre Name",
+        "edit_item": "Edit Genre",
+        "view_item": "View Genre",
+        "update_item": "Update Genre",
+        "search_items": "Search Genres",
+        "not_found": "No genres found",
+        "all_items": "All Genres",
+        "menu_name": "Genres",
+        "back_to_items": "Back to Genres"
+      },
+      "args": {
+        "name": "Genres",
+        "slug": "genre",
+        "public": true,
+        "publicly_queryable": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "show_in_nav_menus": true,
+        "show_in_rest": true,
+        "show_tagcloud": true,
+        "show_in_quick_edit": true,
+        "show_admin_column": true,
+        "hierarchical": false,
+        "query_var": true,
+        "rewrite": true,
+        "rewrite_slug": "genre"
+      },
+      "meta_fields": []
+    }
+  ],
+  "meta_boxes": [
+    {
+      "id": 10,
+      "slug": "actor-fields",
+      "status": "publish",
+      "labels": {},
+      "args": {
+        "name": "Actor",
+        "object_type": "post",
+        "allowed_post_type": [
+          "actor"
+        ],
+        "allowed_tax": [],
+        "allowed_columns_position": "normal"
+      },
       "meta_fields": [
         {
           "title": "First Name",
@@ -48,6 +232,7 @@
           "object_type": "field",
           "type": "text",
           "is_required": true,
+          "width": "33%",
           "default_val": "",
           "description": ""
         },
@@ -57,6 +242,7 @@
           "object_type": "field",
           "type": "text",
           "is_required": true,
+          "width": "33%",
           "default_val": "",
           "description": ""
         },
@@ -66,6 +252,7 @@
           "object_type": "field",
           "type": "text",
           "is_required": false,
+          "width": "33%",
           "default_val": "",
           "description": ""
         },
@@ -75,6 +262,7 @@
           "object_type": "field",
           "type": "date",
           "is_required": false,
+          "width": "33%",
           "is_timestamp": false,
           "default_val": "",
           "description": ""
@@ -151,45 +339,18 @@
       ]
     },
     {
-      "id": 2,
-      "slug": "director",
+      "id": 11,
+      "slug": "director-fields",
       "status": "publish",
-      "labels": {
-        "name": "Directors",
-        "singular_name": "Director",
-        "add_new": "Add New",
-        "add_new_item": "Add New Director",
-        "edit_item": "Edit Director",
-        "new_item": "New Director",
-        "view_item": "View Director",
-        "search_items": "Search Directors",
-        "not_found": "No directors found",
-        "not_found_in_trash": "No directors found in Trash",
-        "all_items": "All Directors",
-        "menu_name": "Directors"
-      },
+      "labels": {},
       "args": {
-        "name": "Directors",
-        "slug": "director",
-        "public": true,
-        "publicly_queryable": true,
-        "show_ui": true,
-        "show_in_menu": true,
-        "show_in_nav_menus": true,
-        "show_in_rest": true,
-        "query_var": true,
-        "rewrite": {
-          "slug": "director"
-        },
-        "capability_type": "post",
-        "has_archive": false,
-        "hierarchical": false,
-        "menu_position": null,
-        "menu_icon": "dashicons-megaphone",
-        "supports": [
-          "thumbnail",
-          "custom-fields"
-        ]
+        "name": "Director",
+        "object_type": "post",
+        "allowed_post_type": [
+          "director"
+        ],
+        "allowed_tax": [],
+        "allowed_columns_position": "normal"
       },
       "meta_fields": [
         {
@@ -198,6 +359,7 @@
           "object_type": "field",
           "type": "text",
           "is_required": true,
+          "width": "33%",
           "default_val": "",
           "description": ""
         },
@@ -207,51 +369,25 @@
           "object_type": "field",
           "type": "text",
           "is_required": true,
+          "width": "33%",
           "default_val": "",
           "description": ""
         }
       ]
     },
     {
-      "id": 3,
-      "slug": "movie",
+      "id": 12,
+      "slug": "movie-fields",
       "status": "publish",
-      "labels": {
-        "name": "Movies",
-        "singular_name": "Movie",
-        "add_new": "Add New",
-        "add_new_item": "Add New Movie",
-        "edit_item": "Edit Movie",
-        "new_item": "New Movie",
-        "view_item": "View Movie",
-        "search_items": "Search Movies",
-        "not_found": "No movies found",
-        "not_found_in_trash": "No movies found in Trash",
-        "all_items": "All Movies",
-        "menu_name": "Movies"
-      },
+      "labels": {},
       "args": {
-        "name": "Movies",
-        "slug": "movie",
-        "public": true,
-        "publicly_queryable": true,
-        "show_ui": true,
-        "show_in_menu": true,
-        "show_in_nav_menus": true,
-        "show_in_rest": true,
-        "query_var": true,
-        "rewrite": {
-          "slug": "movie"
-        },
-        "capability_type": "post",
-        "has_archive": false,
-        "hierarchical": false,
-        "menu_position": null,
-        "menu_icon": "dashicons-video-alt",
-        "supports": [
-          "title",
-          "custom-fields"
-        ]
+        "name": "Movie",
+        "object_type": "post",
+        "allowed_post_type": [
+          "movie"
+        ],
+        "allowed_tax": [],
+        "allowed_columns_position": "normal"
       },
       "meta_fields": [
         {
@@ -259,7 +395,7 @@
           "name": "poster",
           "object_type": "field",
           "type": "media",
-          "is_required": false,
+          "is_required": true,
           "value_format": "both",
           "default_val": "",
           "description": ""
@@ -274,11 +410,26 @@
           "description": ""
         },
         {
+          "title": "Genre",
+          "name": "genre",
+          "object_type": "field",
+          "type": "select",
+          "is_required": false,
+          "default_val": "",
+          "description": "",
+          "options_from": "terms",
+          "glossary_id": "",
+          "options_tax": "genre",
+          "is_multiple": false,
+          "allow_custom": false
+        },
+        {
           "title": "Budget",
           "name": "budget",
           "object_type": "field",
           "type": "number",
           "is_required": false,
+          "width": "30%",
           "min_value": 0,
           "max_value": "",
           "step_value": 1,
@@ -298,44 +449,18 @@
       ]
     },
     {
-      "id": 4,
-      "slug": "studio",
+      "id": 13,
+      "slug": "studio-fields",
       "status": "publish",
-      "labels": {
-        "name": "Studios",
-        "singular_name": "Studio",
-        "add_new": "Add New",
-        "add_new_item": "Add New Studio",
-        "edit_item": "Edit Studio",
-        "new_item": "New Studio",
-        "view_item": "View Studio",
-        "search_items": "Search Studios",
-        "not_found": "No studios found",
-        "not_found_in_trash": "No studios found in Trash",
-        "all_items": "All Studios",
-        "menu_name": "Studios"
-      },
+      "labels": {},
       "args": {
-        "name": "Studios",
-        "slug": "studio",
-        "public": true,
-        "publicly_queryable": true,
-        "show_ui": true,
-        "show_in_menu": true,
-        "show_in_nav_menus": true,
-        "show_in_rest": true,
-        "query_var": true,
-        "rewrite": {
-          "slug": "studio"
-        },
-        "capability_type": "post",
-        "has_archive": false,
-        "hierarchical": false,
-        "menu_position": null,
-        "menu_icon": "dashicons-video-alt2",
-        "supports": [
-          "custom-fields"
-        ]
+        "name": "Studio",
+        "object_type": "post",
+        "allowed_post_type": [
+          "studio"
+        ],
+        "allowed_tax": [],
+        "allowed_columns_position": "normal"
       },
       "meta_fields": [
         {
@@ -343,7 +468,7 @@
           "name": "logo",
           "object_type": "field",
           "type": "media",
-          "is_required": false,
+          "is_required": true,
           "value_format": "both",
           "default_val": "",
           "description": ""
@@ -363,56 +488,24 @@
           "object_type": "field",
           "type": "textarea",
           "is_required": false,
+          "width": "33%",
           "default_val": "",
           "description": ""
+        },
+        {
+          "title": "Map",
+          "name": "map",
+          "object_type": "field",
+          "type": "map",
+          "is_required": false,
+          "default_val": "",
+          "description": "",
+          "map_height": 300,
+          "map_format": "location_string"
         }
       ]
     }
   ],
-  "taxonomies": [
-    {
-      "id": 5,
-      "slug": "genre",
-      "status": "publish",
-      "object_type": [
-        "movie"
-      ],
-      "labels": {
-        "name": "Genres",
-        "singular_name": "Genre",
-        "add_new_item": "Add New Genre",
-        "new_item_name": "New Genre Name",
-        "edit_item": "Edit Genre",
-        "view_item": "View Genre",
-        "update_item": "Update Genre",
-        "search_items": "Search Genres",
-        "not_found": "No genres found",
-        "all_items": "All Genres",
-        "menu_name": "Genres",
-        "back_to_items": "Back to Genres"
-      },
-      "args": {
-        "name": "Genres",
-        "slug": "genre",
-        "public": true,
-        "publicly_queryable": true,
-        "show_ui": true,
-        "show_in_menu": true,
-        "show_in_nav_menus": true,
-        "show_in_rest": true,
-        "show_tagcloud": true,
-        "show_in_quick_edit": true,
-        "show_admin_column": true,
-        "hierarchical": false,
-        "query_var": true,
-        "rewrite": {
-          "slug": "genre"
-        }
-      },
-      "meta_fields": []
-    }
-  ],
-  "meta_boxes": [],
   "relations": [
     {
       "id": 6,

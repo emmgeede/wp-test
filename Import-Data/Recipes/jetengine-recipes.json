@@ -28,7 +28,7 @@
         "show_in_nav_menus": true,
         "show_in_rest": true,
         "query_var": true,
-        "rewrite": { "slug": "recipe" },
+        "rewrite": true,
         "rewrite_slug": "recipe",
         "capability_type": "post",
         "has_archive": false,
@@ -37,239 +37,7 @@
         "menu_icon": "dashicons-carrot",
         "supports": ["title", "thumbnail", "custom-fields"]
       },
-      "meta_fields": [
-        {
-          "title": "Image",
-          "name": "image",
-          "object_type": "field",
-          "type": "media",
-          "is_required": true,
-          "value_format": "both",
-          "default_val": "",
-          "description": ""
-        },
-        {
-          "title": "Description",
-          "name": "description",
-          "object_type": "field",
-          "type": "wysiwyg",
-          "is_required": false,
-          "default_val": "",
-          "description": ""
-        },
-        {
-          "title": "Prep Time",
-          "name": "prep_time",
-          "object_type": "field",
-          "type": "number",
-          "is_required": false,
-          "min_value": 0,
-          "max_value": "",
-          "step_value": 1,
-          "default_val": "",
-          "description": ""
-        },
-        {
-          "title": "Cook Time",
-          "name": "cook_time",
-          "object_type": "field",
-          "type": "number",
-          "is_required": false,
-          "min_value": 0,
-          "max_value": "",
-          "step_value": 1,
-          "default_val": "",
-          "description": ""
-        },
-        {
-          "title": "Servings",
-          "name": "servings",
-          "object_type": "field",
-          "type": "number",
-          "is_required": false,
-          "min_value": 1,
-          "max_value": "",
-          "step_value": 1,
-          "default_val": "",
-          "description": ""
-        },
-        {
-          "title": "Difficulty",
-          "name": "difficulty",
-          "object_type": "field",
-          "type": "select",
-          "is_required": false,
-          "default_val": "",
-          "description": "",
-          "options": [
-            { "key": "easy", "value": "Easy" },
-            { "key": "medium", "value": "Medium" },
-            { "key": "hard", "value": "Hard" }
-          ]
-        },
-        {
-          "title": "Cuisine",
-          "name": "cuisine",
-          "object_type": "field",
-          "type": "select",
-          "is_required": false,
-          "default_val": "",
-          "description": "",
-          "options_from": "terms",
-          "glossary_id": "",
-          "options_tax": "cuisine",
-          "is_multiple": false,
-          "allow_custom": false
-        },
-        {
-          "title": "Course",
-          "name": "course",
-          "object_type": "field",
-          "type": "select",
-          "is_required": false,
-          "default_val": "",
-          "description": "",
-          "options_from": "terms",
-          "glossary_id": "",
-          "options_tax": "course",
-          "is_multiple": false,
-          "allow_custom": false
-        },
-        {
-          "title": "Diet",
-          "name": "diet",
-          "object_type": "field",
-          "type": "select",
-          "is_required": false,
-          "default_val": "",
-          "description": "",
-          "options_from": "terms",
-          "glossary_id": "",
-          "options_tax": "diet",
-          "is_multiple": false,
-          "allow_custom": false
-        },
-        {
-          "title": "Ingredients",
-          "name": "ingredients",
-          "object_type": "field",
-          "type": "repeater",
-          "is_required": false,
-          "default_val": "",
-          "description": "",
-          "repeater-fields": [
-            {
-              "title": "Ingredient",
-              "name": "ingredient",
-              "object_type": "field",
-              "type": "text",
-              "is_required": false,
-              "default_val": "",
-              "description": ""
-            },
-            {
-              "title": "Amount",
-              "name": "amount",
-              "object_type": "field",
-              "type": "text",
-              "is_required": false,
-              "default_val": "",
-              "description": ""
-            },
-            {
-              "title": "Unit",
-              "name": "unit",
-              "object_type": "field",
-              "type": "select",
-              "is_required": false,
-              "default_val": "",
-              "description": "",
-              "options": [
-                { "key": "g", "value": "g" },
-                { "key": "kg", "value": "kg" },
-                { "key": "ml", "value": "ml" },
-                { "key": "l", "value": "l" },
-                { "key": "tsp", "value": "tsp" },
-                { "key": "tbsp", "value": "tbsp" },
-                { "key": "cup", "value": "cup" },
-                { "key": "piece", "value": "piece" },
-                { "key": "pinch", "value": "pinch" }
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Instructions",
-          "name": "instructions",
-          "object_type": "field",
-          "type": "repeater",
-          "is_required": false,
-          "default_val": "",
-          "description": "",
-          "repeater-fields": [
-            {
-              "title": "Step",
-              "name": "step",
-              "object_type": "field",
-              "type": "number",
-              "is_required": false,
-              "min_value": 1,
-              "max_value": "",
-              "step_value": 1,
-              "default_val": "",
-              "description": ""
-            },
-            {
-              "title": "Instruction Text",
-              "name": "instruction_text",
-              "object_type": "field",
-              "type": "textarea",
-              "is_required": false,
-              "default_val": "",
-              "description": ""
-            },
-            {
-              "title": "Step Image",
-              "name": "step_image",
-              "object_type": "field",
-              "type": "media",
-              "is_required": false,
-              "value_format": "both",
-              "default_val": "",
-              "description": ""
-            }
-          ]
-        },
-        {
-          "title": "Nutrition",
-          "name": "nutrition",
-          "object_type": "field",
-          "type": "repeater",
-          "is_required": false,
-          "default_val": "",
-          "description": "",
-          "repeater-fields": [
-            {
-              "title": "Nutrient",
-              "name": "nutrient",
-              "object_type": "field",
-              "type": "text",
-              "is_required": false,
-              "default_val": "",
-              "description": ""
-            },
-            {
-              "title": "Value",
-              "name": "nutrient_value",
-              "object_type": "field",
-              "type": "text",
-              "is_required": false,
-              "default_val": "",
-              "description": ""
-            }
-          ]
-        }
-      ]
+      "meta_fields": []
     },
     {
       "id": 102,
@@ -299,7 +67,7 @@
         "show_in_nav_menus": true,
         "show_in_rest": true,
         "query_var": true,
-        "rewrite": { "slug": "chef" },
+        "rewrite": true,
         "rewrite_slug": "chef",
         "capability_type": "post",
         "has_archive": false,
@@ -308,54 +76,7 @@
         "menu_icon": "dashicons-admin-users",
         "supports": ["title", "thumbnail", "custom-fields"]
       },
-      "meta_fields": [
-        {
-          "title": "First Name",
-          "name": "first_name",
-          "object_type": "field",
-          "type": "text",
-          "is_required": true,
-          "default_val": "",
-          "description": ""
-        },
-        {
-          "title": "Last Name",
-          "name": "last_name",
-          "object_type": "field",
-          "type": "text",
-          "is_required": true,
-          "default_val": "",
-          "description": ""
-        },
-        {
-          "title": "Bio",
-          "name": "bio",
-          "object_type": "field",
-          "type": "wysiwyg",
-          "is_required": false,
-          "default_val": "",
-          "description": ""
-        },
-        {
-          "title": "Photo",
-          "name": "photo",
-          "object_type": "field",
-          "type": "media",
-          "is_required": false,
-          "value_format": "both",
-          "default_val": "",
-          "description": ""
-        },
-        {
-          "title": "Website",
-          "name": "website",
-          "object_type": "field",
-          "type": "text",
-          "is_required": false,
-          "default_val": "",
-          "description": ""
-        }
-      ]
+      "meta_fields": []
     },
     {
       "id": 103,
@@ -385,7 +106,7 @@
         "show_in_nav_menus": true,
         "show_in_rest": true,
         "query_var": true,
-        "rewrite": { "slug": "cookbook" },
+        "rewrite": true,
         "rewrite_slug": "cookbook",
         "capability_type": "post",
         "has_archive": false,
@@ -394,57 +115,7 @@
         "menu_icon": "dashicons-book",
         "supports": ["title", "thumbnail", "custom-fields"]
       },
-      "meta_fields": [
-        {
-          "title": "Cover Image",
-          "name": "cover_image",
-          "object_type": "field",
-          "type": "media",
-          "is_required": false,
-          "value_format": "both",
-          "default_val": "",
-          "description": ""
-        },
-        {
-          "title": "Publisher",
-          "name": "publisher",
-          "object_type": "field",
-          "type": "text",
-          "is_required": false,
-          "default_val": "",
-          "description": ""
-        },
-        {
-          "title": "Year",
-          "name": "year",
-          "object_type": "field",
-          "type": "number",
-          "is_required": false,
-          "min_value": 0,
-          "max_value": "",
-          "step_value": 1,
-          "default_val": "",
-          "description": ""
-        },
-        {
-          "title": "ISBN",
-          "name": "isbn",
-          "object_type": "field",
-          "type": "text",
-          "is_required": false,
-          "default_val": "",
-          "description": ""
-        },
-        {
-          "title": "Description",
-          "name": "description",
-          "object_type": "field",
-          "type": "textarea",
-          "is_required": false,
-          "default_val": "",
-          "description": ""
-        }
-      ]
+      "meta_fields": []
     }
   ],
   "taxonomies": [
@@ -481,7 +152,7 @@
         "show_admin_column": true,
         "hierarchical": false,
         "query_var": true,
-        "rewrite": { "slug": "cuisine" },
+        "rewrite": true,
         "rewrite_slug": "cuisine"
       },
       "meta_fields": []
@@ -519,7 +190,7 @@
         "show_admin_column": true,
         "hierarchical": false,
         "query_var": true,
-        "rewrite": { "slug": "course" },
+        "rewrite": true,
         "rewrite_slug": "course"
       },
       "meta_fields": []
@@ -557,7 +228,7 @@
         "show_admin_column": true,
         "hierarchical": false,
         "query_var": true,
-        "rewrite": { "slug": "diet" },
+        "rewrite": true,
         "rewrite_slug": "diet"
       },
       "meta_fields": []
