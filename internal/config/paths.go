@@ -70,5 +70,5 @@ const (
 	ContainerWP    = "wpt-wordpress"
 	ContainerMySQL = "wpt-mysql"
 	ContainerCaddy = "wpt-caddy"
-	SiteURL        = "http://wpfaker-test.dv:8089"
+	SiteURL        = "http://wpfaker.dv"
 )

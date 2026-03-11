@@ -7,7 +7,7 @@ snapshots/*
 !snapshots/.gitkeep
 
 # Go binary
-wpt
+/wpt
 
 # Git worktrees
 .worktrees/

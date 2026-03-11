@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -127,6 +128,7 @@ var provisionCmd = &cobra.Command{
 			return sm.Err()
 		}
 		fmt.Printf("\n  WordPress ready at %s\n", config.SiteURL)
+		exec.Command("xdg-open", config.SiteURL+"/wp-admin").Start()
 		return nil
 	},
 }
