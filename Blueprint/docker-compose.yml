@@ -22,11 +22,12 @@ services:
       - ../mu-plugins:/var/www/html/wp-content/mu-plugins
       # Import data (for provision.sh)
       - ../Import-Data:/tmp/import-data:ro
-      # Setup script
+      # Setup and import scripts
       - ./wp-setup.sh:/tmp/wp-setup.sh:ro
+      - ./acpt-import.php:/tmp/acpt-import.php:ro
     command: >
       bash -c '
-        /tmp/wp-setup.sh &
+        bash /tmp/wp-setup.sh &
         docker-entrypoint.sh php-fpm
       '
     depends_on:
@@ -59,8 +60,8 @@ services:
     container_name: wpt-caddy
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "8089:80"
+      - "8443:443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - wordpress_data:/var/www/html:ro

@@ -145,6 +145,8 @@ for file in "${METABOX_FILES[@]}"; do
         }
         \$imported = 0;
         foreach (\$posts as \$post) {
+            // Skip entries without required fields
+            if (empty(\$post['post_type']) || empty(\$post['post_title'])) { continue; }
             // Skip duplicates by title + post_type
             \$existing = get_posts([
                 'post_type'   => \$post['post_type'],
@@ -210,25 +212,7 @@ $WP eval "
 # ---------------------------------------------------------------------------
 section "Task 8: Import ACPT schemas"
 
-$WP eval "
-    \$file = '/tmp/import-data/acpt-import.acpt';
-    if (!file_exists(\$file)) {
-        echo 'ERROR: acpt-import.acpt not found';
-        exit(1);
-    }
-    \$data = json_decode(file_get_contents(\$file), true);
-    if (\$data === null) {
-        echo 'ERROR: Invalid JSON in acpt-import.acpt';
-        exit(1);
-    }
-    try {
-        ACPT\Core\Repository\ImportRepository::import(\$data);
-        echo 'ACPT schema imported successfully.';
-    } catch (Exception \$e) {
-        echo 'ERROR: ' . \$e->getMessage();
-        exit(1);
-    }
-"
+$WP eval-file /tmp/acpt-import.php
 
 # ---------------------------------------------------------------------------
 # Task 9: Set default state
@@ -267,4 +251,4 @@ section "Provisioning complete"
 echo "Active plugins:"
 $WP plugin list --status=active --fields=name,version --format=table
 echo ""
-echo "Done! WordPress is ready at http://wpfaker-test.dv"
+echo "Done! WordPress is ready at http://wpfaker-test.dv:8089"

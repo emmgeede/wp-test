@@ -2,6 +2,10 @@
 Docker/*
 !Docker/.gitkeep
 
+# DB snapshots (large binary files)
+snapshots/*
+!snapshots/.gitkeep
+
 # OS
 .DS_Store
 Thumbs.db

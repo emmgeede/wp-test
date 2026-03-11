@@ -200,21 +200,16 @@ cd ~/Projects/wpfaker
 npm run build
 ```
 
-If a `dist/` folder with a zip exists, use that. Otherwise create one:
+Copy the latest zip to the wp-test project root:
 ```bash
 cd ~/Projects/wpfaker
 WPFAKER_ZIP=$(ls -t dist/wpfaker-*.zip 2>/dev/null | head -1)
+cp "$WPFAKER_ZIP" ~/Projects/wp-test/wpfaker.zip
+```
 
-if [ -z "$WPFAKER_ZIP" ]; then
-    npm run zip 2>/dev/null || npm run package 2>/dev/null || (
-        mkdir -p /tmp/wpfaker-build
-        rsync -a --exclude='node_modules' --exclude='.git' --exclude='tests' --exclude='src' . /tmp/wpfaker-build/wpfaker/
-        cd /tmp && zip -r wpfaker.zip wpfaker/
-        WPFAKER_ZIP="/tmp/wpfaker.zip"
-    )
-fi
-
-docker cp "$WPFAKER_ZIP" wpt-wordpress:/var/www/html/wp-content/plugins/wpfaker.zip
+Then copy it into the WordPress container:
+```bash
+docker cp ~/Projects/wp-test/wpfaker.zip wpt-wordpress:/var/www/html/wp-content/plugins/wpfaker.zip
 ```
 
 ### 11. Flush rewrite rules

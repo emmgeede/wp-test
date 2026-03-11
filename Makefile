@@ -5,18 +5,21 @@ BLUEPRINT_DIR = Blueprint
 SNAPSHOT_DIR = snapshots
 GOLDEN_SNAPSHOT = $(SNAPSHOT_DIR)/golden.sql.gz
 WP = docker exec wpt-wordpress wp --allow-root --path=/var/www/html
+MYSQLDUMP = docker exec wpt-wordpress mysqldump --skip-ssl -h db -u wordpress -pwordpress wordpress
+MYSQL = docker exec -i wpt-wordpress mysql --skip-ssl -h db -u wordpress -pwordpress wordpress
 
 # Start containers (copy Blueprint → Docker first)
 up:
 	@mkdir -p $(DOCKER_DIR) $(SNAPSHOT_DIR)
-	@cp $(BLUEPRINT_DIR)/docker-compose.yml $(DOCKER_DIR)/
-	@cp $(BLUEPRINT_DIR)/Caddyfile $(DOCKER_DIR)/
-	@cp $(BLUEPRINT_DIR)/wp-setup.sh $(DOCKER_DIR)/
-	@cp $(BLUEPRINT_DIR)/php-uploads.ini $(DOCKER_DIR)/
+	@cp -a $(BLUEPRINT_DIR)/docker-compose.yml $(DOCKER_DIR)/
+	@cp -a $(BLUEPRINT_DIR)/Caddyfile $(DOCKER_DIR)/
+	@cp -a $(BLUEPRINT_DIR)/wp-setup.sh $(DOCKER_DIR)/
+	@cp -a $(BLUEPRINT_DIR)/php-uploads.ini $(DOCKER_DIR)/
+	@cp -a $(BLUEPRINT_DIR)/acpt-import.php $(DOCKER_DIR)/
 	@cd $(DOCKER_DIR) && docker compose up -d
 	@echo "Waiting for WordPress setup..."
 	@until $(WP) core is-installed 2>/dev/null; do sleep 2; done
-	@echo "WordPress is ready at http://wpfaker-test.dv"
+	@echo "WordPress is ready at http://wpfaker-test.dv:8089"
 
 # Stop containers (keep volumes)
 down:
@@ -31,14 +34,14 @@ provision: up
 # Export current DB as golden snapshot
 snapshot:
 	@mkdir -p $(SNAPSHOT_DIR)
-	@$(WP) db export - | gzip > $(GOLDEN_SNAPSHOT)
+	@$(MYSQLDUMP) --no-tablespaces | gzip > $(GOLDEN_SNAPSHOT)
 	@echo "Snapshot saved to $(GOLDEN_SNAPSHOT) ($$(du -h $(GOLDEN_SNAPSHOT) | cut -f1))"
 
 # Reset DB from golden snapshot (~3 seconds)
 reset:
 	@test -f $(GOLDEN_SNAPSHOT) || (echo "No snapshot found. Run 'make provision' first." && exit 1)
 	@echo "Resetting database..."
-	@gunzip -c $(GOLDEN_SNAPSHOT) | $(WP) db import -
+	@gunzip -c $(GOLDEN_SNAPSHOT) | $(MYSQL)
 	@$(WP) cache flush 2>/dev/null || true
 	@echo "Database reset complete."
 
