@@ -40,7 +40,7 @@
           "custom-fields"
         ]
       },
-      "meta_fields": []
+      "meta_fields": false
     },
     {
       "id": 2,
@@ -82,7 +82,7 @@
           "custom-fields"
         ]
       },
-      "meta_fields": []
+      "meta_fields": false
     },
     {
       "id": 3,
@@ -124,7 +124,7 @@
           "custom-fields"
         ]
       },
-      "meta_fields": []
+      "meta_fields": false
     },
     {
       "id": 4,
@@ -165,7 +165,7 @@
           "custom-fields"
         ]
       },
-      "meta_fields": []
+      "meta_fields": false
     }
   ],
   "taxonomies": [
@@ -207,7 +207,7 @@
         "rewrite": true,
         "rewrite_slug": "genre"
       },
-      "meta_fields": []
+      "meta_fields": false
     }
   ],
   "meta_boxes": [
@@ -526,7 +526,7 @@
         "child_rel_name": "Related Movies",
         "is_single_post": false
       },
-      "meta_fields": []
+      "meta_fields": false
     },
     {
       "id": 7,
@@ -547,7 +547,7 @@
         "child_rel_name": "Related Movies",
         "is_single_post": false
       },
-      "meta_fields": []
+      "meta_fields": false
     },
     {
       "id": 8,
@@ -568,7 +568,7 @@
         "child_rel_name": "Related Movies",
         "is_single_post": false
       },
-      "meta_fields": []
+      "meta_fields": false
     }
   ]
 }

@@ -37,7 +37,7 @@
         "menu_icon": "dashicons-carrot",
         "supports": ["title", "thumbnail", "custom-fields"]
       },
-      "meta_fields": []
+      "meta_fields": false
     },
     {
       "id": 102,
@@ -76,7 +76,7 @@
         "menu_icon": "dashicons-admin-users",
         "supports": ["title", "thumbnail", "custom-fields"]
       },
-      "meta_fields": []
+      "meta_fields": false
     },
     {
       "id": 103,
@@ -115,7 +115,7 @@
         "menu_icon": "dashicons-book",
         "supports": ["title", "thumbnail", "custom-fields"]
       },
-      "meta_fields": []
+      "meta_fields": false
     }
   ],
   "taxonomies": [
@@ -155,7 +155,7 @@
         "rewrite": true,
         "rewrite_slug": "cuisine"
       },
-      "meta_fields": []
+      "meta_fields": false
     },
     {
       "id": 105,
@@ -193,7 +193,7 @@
         "rewrite": true,
         "rewrite_slug": "course"
       },
-      "meta_fields": []
+      "meta_fields": false
     },
     {
       "id": 106,
@@ -231,7 +231,7 @@
         "rewrite": true,
         "rewrite_slug": "diet"
       },
-      "meta_fields": []
+      "meta_fields": false
     }
   ],
   "meta_boxes": [
@@ -627,7 +627,7 @@
         "child_rel_name": "Related Recipes",
         "is_single_post": false
       },
-      "meta_fields": []
+      "meta_fields": false
     },
     {
       "id": 111,
@@ -648,7 +648,7 @@
         "child_rel_name": "Related Recipes",
         "is_single_post": false
       },
-      "meta_fields": []
+      "meta_fields": false
     }
   ]
 }
