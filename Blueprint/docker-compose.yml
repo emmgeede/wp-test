@@ -45,6 +45,7 @@ services:
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
       MYSQL_ROOT_PASSWORD: root
+    command: --require-secure-transport=OFF
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
