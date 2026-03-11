@@ -1,0 +1,250 @@
+[
+    {
+        "$schema": "https://schemas.metabox.io/field-group.json",
+        "id": "recipe-fields",
+        "title": "Recipe",
+        "post_types": ["recipe"],
+        "context": "normal",
+        "style": "default",
+        "priority": "high",
+        "fields": [
+            {
+                "id": "image",
+                "type": "single_image",
+                "name": "Image",
+                "required": true
+            },
+            {
+                "id": "description",
+                "type": "wysiwyg",
+                "name": "Description",
+                "options": {
+                    "textarea_rows": 10,
+                    "media_buttons": true
+                }
+            },
+            {
+                "id": "prep_time",
+                "type": "number",
+                "name": "Prep Time",
+                "columns": 4,
+                "append": "min"
+            },
+            {
+                "id": "cook_time",
+                "type": "number",
+                "name": "Cook Time",
+                "columns": 4,
+                "append": "min"
+            },
+            {
+                "id": "servings",
+                "type": "number",
+                "name": "Servings",
+                "columns": 4
+            },
+            {
+                "id": "difficulty",
+                "type": "select",
+                "name": "Difficulty",
+                "options": {
+                    "easy": "Easy",
+                    "medium": "Medium",
+                    "hard": "Hard"
+                }
+            },
+            {
+                "id": "cuisine",
+                "type": "taxonomy_advanced",
+                "name": "Cuisine",
+                "taxonomy": ["cuisine"],
+                "field_type": "select_advanced",
+                "multiple": false,
+                "add_new": true
+            },
+            {
+                "id": "course",
+                "type": "taxonomy_advanced",
+                "name": "Course",
+                "taxonomy": ["course"],
+                "field_type": "select_advanced",
+                "multiple": false,
+                "add_new": true
+            },
+            {
+                "id": "diet",
+                "type": "taxonomy_advanced",
+                "name": "Diet",
+                "taxonomy": ["diet"],
+                "field_type": "select_advanced",
+                "multiple": false,
+                "add_new": true
+            },
+            {
+                "id": "ingredients",
+                "type": "group",
+                "name": "Ingredients",
+                "clone": true,
+                "sort_clone": true,
+                "collapsible": true,
+                "group_title": "{ingredient}",
+                "add_button": "Add Row",
+                "fields": [
+                    {
+                        "id": "ingredient",
+                        "type": "text",
+                        "name": "Ingredient"
+                    },
+                    {
+                        "id": "amount",
+                        "type": "text",
+                        "name": "Amount"
+                    },
+                    {
+                        "id": "unit",
+                        "type": "select",
+                        "name": "Unit",
+                        "options": {
+                            "g": "g",
+                            "kg": "kg",
+                            "ml": "ml",
+                            "l": "l",
+                            "tsp": "tsp",
+                            "tbsp": "tbsp",
+                            "cup": "cup",
+                            "piece": "piece",
+                            "pinch": "pinch"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "instructions",
+                "type": "group",
+                "name": "Instructions",
+                "clone": true,
+                "sort_clone": true,
+                "collapsible": true,
+                "group_title": "Step {step}",
+                "add_button": "Add Row",
+                "fields": [
+                    {
+                        "id": "step",
+                        "type": "number",
+                        "name": "Step"
+                    },
+                    {
+                        "id": "instruction_text",
+                        "type": "textarea",
+                        "name": "Instruction Text"
+                    },
+                    {
+                        "id": "step_image",
+                        "type": "single_image",
+                        "name": "Step Image"
+                    }
+                ]
+            },
+            {
+                "id": "nutrition",
+                "type": "group",
+                "name": "Nutrition",
+                "clone": true,
+                "sort_clone": true,
+                "collapsible": true,
+                "group_title": "{nutrient}",
+                "add_button": "Add Row",
+                "fields": [
+                    {
+                        "id": "nutrient",
+                        "type": "text",
+                        "name": "Nutrient"
+                    },
+                    {
+                        "id": "nutrient_value",
+                        "type": "text",
+                        "name": "Value"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "$schema": "https://schemas.metabox.io/field-group.json",
+        "id": "chef-fields",
+        "title": "Chef",
+        "post_types": ["chef"],
+        "context": "normal",
+        "style": "default",
+        "priority": "high",
+        "fields": [
+            {
+                "id": "first_name",
+                "type": "text",
+                "name": "First Name",
+                "required": true
+            },
+            {
+                "id": "last_name",
+                "type": "text",
+                "name": "Last Name",
+                "required": true
+            },
+            {
+                "id": "bio",
+                "type": "wysiwyg",
+                "name": "Bio",
+                "options": {
+                    "textarea_rows": 10,
+                    "media_buttons": true
+                }
+            },
+            {
+                "id": "photo",
+                "type": "single_image",
+                "name": "Photo"
+            },
+            {
+                "id": "website",
+                "type": "url",
+                "name": "Website"
+            }
+        ]
+    },
+    {
+        "$schema": "https://schemas.metabox.io/field-group.json",
+        "id": "cookbook-fields",
+        "title": "Cookbook",
+        "post_types": ["cookbook"],
+        "context": "normal",
+        "style": "default",
+        "priority": "high",
+        "fields": [
+            {
+                "id": "cover_image",
+                "type": "single_image",
+                "name": "Cover Image"
+            },
+            {
+                "id": "publisher",
+                "type": "text",
+                "name": "Publisher"
+            },
+            {
+                "id": "year",
+                "type": "number",
+                "name": "Year"
+            },
+            {
+                "id": "isbn",
+                "type": "text",
+                "name": "ISBN"
+            },
+            {
+                "id": "description",
+                "type": "textarea",
+                "name": "Description"
+            }
+        ]
+    }
+]

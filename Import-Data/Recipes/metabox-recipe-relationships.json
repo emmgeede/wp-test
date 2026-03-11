@@ -1,0 +1,32 @@
+[
+    {
+        "$schema": "https://schemas.metabox.io/relationships.json",
+        "id": "recipes-to-chefs",
+        "title": "Recipes to Chefs",
+        "from": {
+            "object_type": "post",
+            "post_type": ["recipe"],
+            "meta_box": {"title": "Chefs"}
+        },
+        "to": {
+            "object_type": "post",
+            "post_type": ["chef"],
+            "meta_box": {"title": "Recipes"}
+        }
+    },
+    {
+        "$schema": "https://schemas.metabox.io/relationships.json",
+        "id": "recipes-to-cookbooks",
+        "title": "Recipes to Cookbooks",
+        "from": {
+            "object_type": "post",
+            "post_type": ["recipe"],
+            "meta_box": {"title": "Cookbooks"}
+        },
+        "to": {
+            "object_type": "post",
+            "post_type": ["cookbook"],
+            "meta_box": {"title": "Recipes"}
+        }
+    }
+]
