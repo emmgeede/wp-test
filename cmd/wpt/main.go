@@ -36,9 +36,69 @@ func init() {
 	rootCmd.AddCommand(provisionCmd, upCmd, downCmd, resetCmd, snapshotCmd, destroyCmd, statusCmd, logsCmd)
 }
 
-// runInteractive is a placeholder — will be implemented in Task 9
 func runInteractive() error {
-	fmt.Println("WPT — run 'wpt --help' for available commands")
+	// Main menu
+	mainItems := []tui.MenuItem{
+		{Label: "Provision (full setup)", Key: "provision"},
+		{Label: "Up (start containers)", Key: "up"},
+		{Label: "Reset (restore snapshot)", Key: "reset"},
+		{Label: "Snapshot (save DB)", Key: "snapshot"},
+		{Label: "Status", Key: "status"},
+		{Label: "Down (stop)", Key: "down"},
+		{Label: "Destroy (remove all)", Key: "destroy"},
+		{Label: "Logs", Key: "logs"},
+	}
+
+	menu := tui.NewMenuModel("WP Test Environment", mainItems)
+	p := tea.NewProgram(menu)
+	result, err := p.Run()
+	if err != nil {
+		return err
+	}
+	chosen := result.(tui.MenuModel).Chosen()
+	if chosen == "" {
+		return nil
+	}
+
+	// WPfaker mode selection for provision/up
+	if chosen == "provision" || chosen == "up" {
+		wpfakerItems := []tui.MenuItem{
+			{Label: "None (test plugins only)", Key: "none"},
+			{Label: "Local (mount ~/Projects/wpfaker)", Key: "local"},
+			{Label: "Zip (install from dist/)", Key: "zip"},
+		}
+		wpMenu := tui.NewMenuModel("WPfaker Mode", wpfakerItems)
+		p2 := tea.NewProgram(wpMenu)
+		result2, err := p2.Run()
+		if err != nil {
+			return err
+		}
+		wpChosen := result2.(tui.MenuModel).Chosen()
+		if wpChosen == "" {
+			return nil
+		}
+		wpfakerFlag = wpChosen
+	}
+
+	// Dispatch to the correct subcommand
+	switch chosen {
+	case "provision":
+		return provisionCmd.RunE(provisionCmd, nil)
+	case "up":
+		return upCmd.RunE(upCmd, nil)
+	case "down":
+		return downCmd.RunE(downCmd, nil)
+	case "reset":
+		return resetCmd.RunE(resetCmd, nil)
+	case "snapshot":
+		return snapshotCmd.RunE(snapshotCmd, nil)
+	case "destroy":
+		return destroyCmd.RunE(destroyCmd, nil)
+	case "status":
+		return statusCmd.RunE(statusCmd, nil)
+	case "logs":
+		return logsCmd.RunE(logsCmd, nil)
+	}
 	return nil
 }
 
