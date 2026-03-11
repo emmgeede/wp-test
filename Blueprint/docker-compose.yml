@@ -73,6 +73,7 @@ services:
       - ../Testplugins/jet-engine:/var/www/html/wp-content/plugins/jet-engine:ro
       - ../Testplugins/meta-box:/var/www/html/wp-content/plugins/meta-box:ro
       - ../Testplugins/meta-box-aio:/var/www/html/wp-content/plugins/meta-box-aio:ro
+      - ../mu-plugins:/var/www/html/wp-content/mu-plugins:ro
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
