@@ -6,6 +6,12 @@ Docker/*
 snapshots/*
 !snapshots/.gitkeep
 
+# Go binary
+wpt
+
+# Git worktrees
+.worktrees/
+
 # OS
 .DS_Store
 Thumbs.db
