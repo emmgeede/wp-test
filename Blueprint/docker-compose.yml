@@ -10,6 +10,25 @@ services:
       WORDPRESS_DB_NAME: wordpress
     volumes:
       - wordpress_data:/var/www/html
+      - ./php-uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+      # Test plugins (each mounted individually)
+      - ../Testplugins/advanced-custom-fields-pro:/var/www/html/wp-content/plugins/advanced-custom-fields-pro
+      - ../Testplugins/advanced-custom-post-type:/var/www/html/wp-content/plugins/advanced-custom-post-type
+      - ../Testplugins/custom-post-type-ui:/var/www/html/wp-content/plugins/custom-post-type-ui
+      - ../Testplugins/jet-engine:/var/www/html/wp-content/plugins/jet-engine
+      - ../Testplugins/meta-box:/var/www/html/wp-content/plugins/meta-box
+      - ../Testplugins/meta-box-aio:/var/www/html/wp-content/plugins/meta-box-aio
+      # Must-use plugins
+      - ../mu-plugins:/var/www/html/wp-content/mu-plugins
+      # Import data (for provision.sh)
+      - ../Import-Data:/tmp/import-data:ro
+      # Setup script
+      - ./wp-setup.sh:/tmp/wp-setup.sh:ro
+    command: >
+      bash -c '
+        /tmp/wp-setup.sh &
+        docker-entrypoint.sh php-fpm
+      '
     depends_on:
       db:
         condition: service_healthy
