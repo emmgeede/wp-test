@@ -37,11 +37,11 @@ done
 echo "WordPress is ready."
 
 # ---------------------------------------------------------------------------
-# Task 3: Activate all 6 test plugins
+# Task 3: Activate all plugins for schema import
 # ---------------------------------------------------------------------------
-section "Task 3: Activate test plugins"
+section "Task 3: Activate all plugins for schema import"
 
-PLUGINS=(
+ALL_PLUGINS=(
     advanced-custom-fields-pro
     advanced-custom-post-type
     custom-post-type-ui
@@ -50,7 +50,8 @@ PLUGINS=(
     meta-box-aio
 )
 
-for plugin in "${PLUGINS[@]}"; do
+echo "Activating all plugins for schema import..."
+for plugin in "${ALL_PLUGINS[@]}"; do
     if $WP plugin is-active "$plugin" 2>/dev/null; then
         echo "  ✓ $plugin (already active)"
     else
@@ -226,30 +227,32 @@ section "Task 8: Import ACPT schemas"
 $WP eval-file /tmp/acpt-import.php
 
 # ---------------------------------------------------------------------------
-# Task 9: Set default state
+# Task 9: Set final plugin state
 # ---------------------------------------------------------------------------
-section "Task 9: Set default state"
+section "Task 9: Set final plugin state"
 
-DEACTIVATE_PLUGINS=(
-    advanced-custom-post-type
-    custom-post-type-ui
-    jet-engine
-    meta-box
-    meta-box-aio
-)
-
-echo "Deactivating non-default plugins..."
-for plugin in "${DEACTIVATE_PLUGINS[@]}"; do
+# Deactivate all test plugins first
+echo "Deactivating all test plugins..."
+for plugin in "${ALL_PLUGINS[@]}"; do
     if $WP plugin is-active "$plugin" 2>/dev/null; then
-        $WP plugin deactivate "$plugin" && echo "  → Deactivated $plugin"
-    else
-        echo "  ✓ $plugin (already inactive)"
+        $WP plugin deactivate "$plugin" 2>/dev/null
     fi
 done
 
-echo "Keeping active: advanced-custom-fields-pro"
-if ! $WP plugin is-active advanced-custom-fields-pro 2>/dev/null; then
-    $WP plugin activate advanced-custom-fields-pro
+# Activate only selected plugins
+if [ -n "${ACTIVATE_PLUGINS:-}" ]; then
+    echo "Activating selected plugins..."
+    IFS=',' read -ra SELECTED <<< "$ACTIVATE_PLUGINS"
+    for plugin in "${SELECTED[@]}"; do
+        plugin=$(echo "$plugin" | xargs)  # trim whitespace
+        if $WP plugin activate "$plugin" 2>/dev/null; then
+            echo "  → Activated $plugin"
+        else
+            echo "  ✗ Failed to activate $plugin"
+        fi
+    done
+else
+    echo "No plugins selected for activation."
 fi
 
 # Install WPfaker based on WPFAKER env var
