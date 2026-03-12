@@ -17,7 +17,7 @@ type ProvisionStep struct {
 }
 
 // ProvisionSteps returns the ordered list of provisioning steps.
-func ProvisionSteps(paths *config.Paths, mode WPfakerMode) []ProvisionStep {
+func ProvisionSteps(paths *config.Paths, mode WPfakerMode, plugins string) []ProvisionStep {
 	compose := NewCompose(paths, mode)
 	steps := []ProvisionStep{
 		{
@@ -45,7 +45,10 @@ func ProvisionSteps(paths *config.Paths, mode WPfakerMode) []ProvisionStep {
 			Name: "Running provision script",
 			Fn: func() error {
 				cmd := exec.Command("bash", filepath.Join(paths.Blueprint, "provision.sh"))
-				cmd.Env = append(os.Environ(), fmt.Sprintf("WPFAKER=%s", mode))
+				cmd.Env = append(os.Environ(),
+				fmt.Sprintf("WPFAKER=%s", mode),
+				fmt.Sprintf("ACTIVATE_PLUGINS=%s", plugins),
+			)
 				out, err := cmd.CombinedOutput()
 				if err != nil {
 					return fmt.Errorf("%s: %w", string(out), err)

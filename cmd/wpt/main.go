@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -15,6 +16,7 @@ import (
 )
 
 var wpfakerFlag string
+var pluginsFlag string
 
 func main() {
 	if err := rootCmd.Execute(); err != nil {
@@ -32,6 +34,7 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	provisionCmd.Flags().StringVar(&wpfakerFlag, "wpfaker", "none", "WPfaker mode: none, local, zip")
+	provisionCmd.Flags().StringVar(&pluginsFlag, "plugins", "", "Comma-separated plugins to activate")
 	upCmd.Flags().StringVar(&wpfakerFlag, "wpfaker", "none", "WPfaker mode: none, local")
 
 	rootCmd.AddCommand(provisionCmd, upCmd, downCmd, resetCmd, snapshotCmd, destroyCmd, statusCmd, logsCmd)
@@ -81,6 +84,29 @@ func runInteractive() error {
 		wpfakerFlag = wpChosen
 	}
 
+	// Plugin selection for provision
+	if chosen == "provision" {
+		pluginItems := []tui.ChecklistItem{
+			{Label: "ACF Pro", Key: "advanced-custom-fields-pro"},
+			{Label: "ACPT", Key: "advanced-custom-post-type"},
+			{Label: "CPT UI", Key: "custom-post-type-ui"},
+			{Label: "JetEngine", Key: "jet-engine"},
+			{Label: "Meta Box", Key: "meta-box"},
+			{Label: "Meta Box AIO", Key: "meta-box-aio"},
+		}
+		cl := tui.NewChecklistModel("Which test plugins should be activated?", pluginItems)
+		p3 := tea.NewProgram(cl)
+		result3, err := p3.Run()
+		if err != nil {
+			return err
+		}
+		clModel := result3.(tui.ChecklistModel)
+		if clModel.Cancelled() {
+			return nil
+		}
+		pluginsFlag = strings.Join(clModel.Selected(), ",")
+	}
+
 	// Dispatch to the correct subcommand
 	switch chosen {
 	case "provision":
@@ -113,7 +139,7 @@ var provisionCmd = &cobra.Command{
 			return err
 		}
 		mode := docker.WPfakerMode(wpfakerFlag)
-		steps := docker.ProvisionSteps(paths, mode)
+		steps := docker.ProvisionSteps(paths, mode, pluginsFlag)
 		tuiSteps := make([]tui.Step, len(steps))
 		for i, s := range steps {
 			tuiSteps[i] = tui.Step{Name: s.Name, Fn: s.Fn}
