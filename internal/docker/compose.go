@@ -21,12 +21,18 @@ const (
 
 // Compose runs docker compose commands in the Docker/ directory.
 type Compose struct {
-	paths *config.Paths
-	mode  WPfakerMode
+	paths      *config.Paths
+	mode       WPfakerMode
+	wpfakerDir string // absolute path to WPfaker source (for local mode)
 }
 
 func NewCompose(paths *config.Paths, mode WPfakerMode) *Compose {
-	return &Compose{paths: paths, mode: mode}
+	return &Compose{paths: paths, mode: mode, wpfakerDir: paths.WPfaker}
+}
+
+// SetWPfakerDir overrides the WPfaker source directory (for worktree support).
+func (c *Compose) SetWPfakerDir(dir string) {
+	c.wpfakerDir = dir
 }
 
 // composeArgs returns the -f flags for docker compose.
@@ -51,6 +57,8 @@ func (c *Compose) Run(args ...string) (string, error) {
 }
 
 // CopyBlueprint copies Blueprint/ files to Docker/.
+// For local mode, it rewrites the WPfaker mount path in docker-compose.wpfaker.yml
+// to point to the selected worktree/branch directory.
 func (c *Compose) CopyBlueprint() error {
 	if err := os.MkdirAll(c.paths.Docker, 0o755); err != nil {
 		return err
@@ -69,6 +77,10 @@ func (c *Compose) CopyBlueprint() error {
 		data, err := os.ReadFile(src)
 		if err != nil {
 			return fmt.Errorf("read %s: %w", f, err)
+		}
+		// Rewrite WPfaker mount path if using a non-default directory
+		if f == "docker-compose.wpfaker.yml" && c.mode == WPfakerLocal && c.wpfakerDir != c.paths.WPfaker {
+			data = []byte(strings.ReplaceAll(string(data), "../../wpfaker", c.wpfakerDir))
 		}
 		if err := os.WriteFile(dst, data, 0o644); err != nil {
 			return fmt.Errorf("write %s: %w", f, err)

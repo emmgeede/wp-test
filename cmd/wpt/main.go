@@ -16,6 +16,7 @@ import (
 )
 
 var wpfakerFlag string
+var wpfakerDirFlag string
 var pluginsFlag string
 
 func main() {
@@ -34,8 +35,10 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	provisionCmd.Flags().StringVar(&wpfakerFlag, "wpfaker", "none", "WPfaker mode: none, local, zip")
+	provisionCmd.Flags().StringVar(&wpfakerDirFlag, "wpfaker-dir", "", "WPfaker source directory (worktree path)")
 	provisionCmd.Flags().StringVar(&pluginsFlag, "plugins", "", "Comma-separated plugins to activate")
 	upCmd.Flags().StringVar(&wpfakerFlag, "wpfaker", "none", "WPfaker mode: none, local")
+	upCmd.Flags().StringVar(&wpfakerDirFlag, "wpfaker-dir", "", "WPfaker source directory (worktree path)")
 
 	rootCmd.AddCommand(provisionCmd, upCmd, downCmd, resetCmd, snapshotCmd, destroyCmd, statusCmd, logsCmd)
 }
@@ -82,6 +85,38 @@ func runInteractive() error {
 			return nil
 		}
 		wpfakerFlag = wpChosen
+
+		// Worktree/branch selection for local mode
+		if wpfakerFlag == "local" {
+			paths, err := config.NewPaths()
+			if err != nil {
+				return err
+			}
+			worktrees := paths.DetectWorktrees()
+			if len(worktrees) > 1 {
+				var wtItems []tui.MenuItem
+				for _, wt := range worktrees {
+					label := wt.Branch
+					if wt.Path == paths.WPfaker {
+						label += "  (main repo)"
+					} else {
+						label += fmt.Sprintf("  (%s)", wt.Path)
+					}
+					wtItems = append(wtItems, tui.MenuItem{Label: label, Key: wt.Path})
+				}
+				wtMenu := tui.NewMenuModel("Select WPfaker branch", wtItems)
+				p3 := tea.NewProgram(wtMenu)
+				result3, err := p3.Run()
+				if err != nil {
+					return err
+				}
+				wtChosen := result3.(tui.MenuModel).Chosen()
+				if wtChosen == "" {
+					return nil
+				}
+				wpfakerDirFlag = wtChosen
+			}
+		}
 	}
 
 	// Plugin selection for provision
@@ -139,7 +174,7 @@ var provisionCmd = &cobra.Command{
 			return err
 		}
 		mode := docker.WPfakerMode(wpfakerFlag)
-		steps := docker.ProvisionSteps(paths, mode, pluginsFlag)
+		steps := docker.ProvisionSteps(paths, mode, pluginsFlag, wpfakerDirFlag)
 		tuiSteps := make([]tui.Step, len(steps))
 		for i, s := range steps {
 			tuiSteps[i] = tui.Step{Name: s.Name, Fn: s.Fn}
@@ -170,6 +205,9 @@ var upCmd = &cobra.Command{
 		}
 		mode := docker.WPfakerMode(wpfakerFlag)
 		compose := docker.NewCompose(paths, mode)
+		if wpfakerDirFlag != "" {
+			compose.SetWPfakerDir(wpfakerDirFlag)
+		}
 
 		steps := []tui.Step{
 			{Name: "Copying Blueprint files", Fn: compose.CopyBlueprint},

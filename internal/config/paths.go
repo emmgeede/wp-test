@@ -3,7 +3,9 @@ package config
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
 // ProjectRoot returns the wp-test project root.
@@ -72,3 +74,38 @@ const (
 	ContainerCaddy = "wpt-caddy"
 	SiteURL        = "http://wpfaker.dv"
 )
+
+// Worktree represents a git worktree entry.
+type Worktree struct {
+	Path   string // absolute path
+	Branch string // branch name (e.g. "master", "feature/foo")
+}
+
+// DetectWorktrees returns all git worktrees for the WPfaker repo.
+// The main worktree is always first. Returns nil if git fails.
+func (p *Paths) DetectWorktrees() []Worktree {
+	cmd := exec.Command("git", "-C", p.WPfaker, "worktree", "list", "--porcelain")
+	out, err := cmd.Output()
+	if err != nil {
+		return nil
+	}
+
+	var worktrees []Worktree
+	var current Worktree
+
+	for _, line := range strings.Split(strings.TrimSpace(string(out)), "\n") {
+		if strings.HasPrefix(line, "worktree ") {
+			if current.Path != "" {
+				worktrees = append(worktrees, current)
+			}
+			current = Worktree{Path: strings.TrimPrefix(line, "worktree ")}
+		} else if strings.HasPrefix(line, "branch refs/heads/") {
+			current.Branch = strings.TrimPrefix(line, "branch refs/heads/")
+		}
+	}
+	if current.Path != "" {
+		worktrees = append(worktrees, current)
+	}
+
+	return worktrees
+}

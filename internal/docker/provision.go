@@ -17,8 +17,12 @@ type ProvisionStep struct {
 }
 
 // ProvisionSteps returns the ordered list of provisioning steps.
-func ProvisionSteps(paths *config.Paths, mode WPfakerMode, plugins string) []ProvisionStep {
+// wpfakerDir overrides the WPfaker source directory (for worktree support).
+func ProvisionSteps(paths *config.Paths, mode WPfakerMode, plugins string, wpfakerDir string) []ProvisionStep {
 	compose := NewCompose(paths, mode)
+	if wpfakerDir != "" {
+		compose.SetWPfakerDir(wpfakerDir)
+	}
 	steps := []ProvisionStep{
 		{
 			Name: "Copying Blueprint files",
