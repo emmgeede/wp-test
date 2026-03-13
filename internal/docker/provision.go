@@ -42,6 +42,13 @@ func ProvisionSteps(paths *config.Paths, mode WPfakerMode, plugins string, wpfak
 			},
 		},
 		{
+			Name: "Updating WordPress",
+			Fn: func() error {
+				_, err := UpdateWP()
+				return err
+			},
+		},
+		{
 			Name: "Fixing upload permissions",
 			Fn:   FixUploadsPermissions,
 		},

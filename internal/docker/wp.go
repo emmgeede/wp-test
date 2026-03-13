@@ -30,6 +30,21 @@ func WaitForWP(timeout time.Duration) error {
 	return fmt.Errorf("wordpress not ready after %s", timeout)
 }
 
+// UpdateWP runs wp core update + wp core update-db if an update is available.
+func UpdateWP() (string, error) {
+	out, err := WP("core", "update")
+	if err != nil {
+		// "WordPress is up to date" is not an error
+		if strings.Contains(out, "up to date") || strings.Contains(out, "already at") {
+			return out, nil
+		}
+		return out, err
+	}
+	// Run database update after core update
+	dbOut, _ := WP("core", "update-db")
+	return out + "\n" + dbOut, nil
+}
+
 // FixUploadsPermissions ensures wp-content/uploads is owned by www-data.
 func FixUploadsPermissions() error {
 	cmd := exec.Command("docker", "exec", config.ContainerWP, "bash", "-c",
