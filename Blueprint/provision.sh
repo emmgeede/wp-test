@@ -142,59 +142,78 @@ $WP eval "
 # ---------------------------------------------------------------------------
 section "Task 6: Import Meta Box schemas"
 
-METABOX_FILES=(
-    "/tmp/import-data/metabox-cpts.json"
-    "/tmp/import-data/metabox-taxonomies.json"
-    "/tmp/import-data/metabox-fields.json"
-    "/tmp/import-data/metabox-relationships.json"
-    "/tmp/import-data/Recipes/metabox-recipe-cpts.json"
-    "/tmp/import-data/Recipes/metabox-recipe-taxonomies.json"
-    "/tmp/import-data/Recipes/metabox-recipe-fields.json"
-    "/tmp/import-data/Recipes/metabox-recipe-relationships.json"
-)
+# Detect Meta Box variant from ACTIVATE_PLUGINS
+MB_VARIANT=""
+if echo "${ACTIVATE_PLUGINS:-}" | grep -q "meta-box-aio"; then
+    MB_VARIANT="aio"
+elif echo "${ACTIVATE_PLUGINS:-}" | grep -q "meta-box"; then
+    MB_VARIANT="standalone"
+fi
 
-for file in "${METABOX_FILES[@]}"; do
-    basename=$(basename "$file")
-    dirname=$(basename "$(dirname "$file")")
-    label="$basename"
-    if [ "$dirname" != "import-data" ]; then
-        label="$dirname/$basename"
-    fi
+if [ -z "$MB_VARIANT" ]; then
+    echo "No Meta Box variant selected, skipping Meta Box import."
+else
+    echo "Meta Box variant: $MB_VARIANT"
 
-    $WP eval "
-        \$file = '$file';
-        if (!file_exists(\$file)) {
-            echo 'SKIP: $label not found';
-            return;
-        }
-        \$posts = json_decode(file_get_contents(\$file), true);
-        if (\$posts === null) {
-            echo 'ERROR: Invalid JSON in $label';
-            return;
-        }
-        \$imported = 0;
-        foreach (\$posts as \$post) {
-            // Skip entries without required fields
-            if (empty(\$post['post_type']) || empty(\$post['post_title'])) { continue; }
-            // Skip duplicates by title + post_type
-            \$existing = get_posts([
-                'post_type'   => \$post['post_type'],
-                'title'       => \$post['post_title'],
-                'post_status' => 'publish',
-                'numberposts' => 1,
-            ]);
-            if (!empty(\$existing)) { continue; }
+    # CPTs and taxonomies are shared (same format for both variants)
+    METABOX_SHARED_FILES=(
+        "/tmp/import-data/metabox-cpts.json"
+        "/tmp/import-data/metabox-taxonomies.json"
+        "/tmp/import-data/Recipes/metabox-recipe-cpts.json"
+        "/tmp/import-data/Recipes/metabox-recipe-taxonomies.json"
+    )
 
-            if (isset(\$post['settings'])) {
-                \$post['post_content'] = wp_json_encode(\$post['settings'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    # Variant-specific files (fields + relationships)
+    METABOX_VARIANT_FILES=(
+        "/tmp/import-data/metabox-${MB_VARIANT}/metabox-${MB_VARIANT}-fields.json"
+        "/tmp/import-data/metabox-${MB_VARIANT}/metabox-${MB_VARIANT}-relationships.json"
+        "/tmp/import-data/metabox-${MB_VARIANT}/Recipes/metabox-${MB_VARIANT}-recipe-fields.json"
+        "/tmp/import-data/metabox-${MB_VARIANT}/Recipes/metabox-${MB_VARIANT}-recipe-relationships.json"
+    )
+
+    METABOX_FILES=("${METABOX_SHARED_FILES[@]}" "${METABOX_VARIANT_FILES[@]}")
+
+    for file in "${METABOX_FILES[@]}"; do
+        basename=$(basename "$file")
+        dirname=$(basename "$(dirname "$file")")
+        label="$basename"
+        if [ "$dirname" != "import-data" ] && [ "$dirname" != "metabox-${MB_VARIANT}" ]; then
+            label="$dirname/$basename"
+        fi
+
+        $WP eval "
+            \$file = '$file';
+            if (!file_exists(\$file)) {
+                echo 'SKIP: $label not found';
+                return;
             }
-            \$post['post_status'] = 'publish';
-            wp_insert_post(\$post);
-            \$imported++;
-        }
-        echo '$label: ' . \$imported . ' imported, ' . (count(\$posts) - \$imported) . ' skipped (duplicates)';
-    "
-done
+            \$posts = json_decode(file_get_contents(\$file), true);
+            if (\$posts === null) {
+                echo 'ERROR: Invalid JSON in $label';
+                return;
+            }
+            \$imported = 0;
+            foreach (\$posts as \$post) {
+                if (empty(\$post['post_type']) || empty(\$post['post_title'])) { continue; }
+                \$existing = get_posts([
+                    'post_type'   => \$post['post_type'],
+                    'title'       => \$post['post_title'],
+                    'post_status' => 'publish',
+                    'numberposts' => 1,
+                ]);
+                if (!empty(\$existing)) { continue; }
+
+                if (isset(\$post['settings'])) {
+                    \$post['post_content'] = wp_json_encode(\$post['settings'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                }
+                \$post['post_status'] = 'publish';
+                wp_insert_post(\$post);
+                \$imported++;
+            }
+            echo '$label: ' . \$imported . ' imported, ' . (count(\$posts) - \$imported) . ' skipped (duplicates)';
+        "
+    done
+fi
 
 # ---------------------------------------------------------------------------
 # Task 7: Import JetEngine schemas (Movies + Recipes)
