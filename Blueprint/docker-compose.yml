@@ -18,6 +18,7 @@ services:
       - ../Testplugins/jet-engine:/var/www/html/wp-content/plugins/jet-engine
       - ../Testplugins/meta-box:/var/www/html/wp-content/plugins/meta-box
       - ../Testplugins/meta-box-aio:/var/www/html/wp-content/plugins/meta-box-aio
+      - ../Testplugins/meta-box-builder:/var/www/html/wp-content/plugins/meta-box-builder
       # Must-use plugins
       - ../mu-plugins:/var/www/html/wp-content/mu-plugins
       # Import data (for provision.sh)
@@ -73,6 +74,7 @@ services:
       - ../Testplugins/jet-engine:/var/www/html/wp-content/plugins/jet-engine:ro
       - ../Testplugins/meta-box:/var/www/html/wp-content/plugins/meta-box:ro
       - ../Testplugins/meta-box-aio:/var/www/html/wp-content/plugins/meta-box-aio:ro
+      - ../Testplugins/meta-box-builder:/var/www/html/wp-content/plugins/meta-box-builder:ro
       - ../mu-plugins:/var/www/html/wp-content/mu-plugins:ro
       - caddy_data:/data
       - caddy_config:/config

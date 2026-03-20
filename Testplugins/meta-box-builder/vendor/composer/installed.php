@@ -1,0 +1,65 @@
+<?php return array(
+    'root' => array(
+        'name' => 'wpmetabox/meta-box-builder',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '8a622222deb37504678c565e3a326b412b699b03',
+        'type' => 'wordpress-plugin',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => false,
+    ),
+    'versions' => array(
+        'elightup/twig' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '588a9d55508d383de47cade5cb0049c809f4750f',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../elightup/twig',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
+            'dev_requirement' => false,
+        ),
+        'riimu/kit-phpencoder' => array(
+            'pretty_version' => 'v2.4.2',
+            'version' => '2.4.2.0',
+            'reference' => '72ff7825de193b272e17b228394819dbfc638e72',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../riimu/kit-phpencoder',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'wpmetabox/mbb-parser' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'c07a1acbbff855cfaeef0169ead30aabe5786b99',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../wpmetabox/mbb-parser',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
+            'dev_requirement' => false,
+        ),
+        'wpmetabox/meta-box-builder' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '8a622222deb37504678c565e3a326b412b699b03',
+            'type' => 'wordpress-plugin',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'wpmetabox/support' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '6c392347cdb77ed133b8a4227b5ee20db89a5717',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../wpmetabox/support',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
+            'dev_requirement' => false,
+        ),
+    ),
+);

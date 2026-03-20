@@ -1,0 +1,175 @@
+{
+    "packages": [
+        {
+            "name": "elightup/twig",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elightup/twig.git",
+                "reference": "588a9d55508d383de47cade5cb0049c809f4750f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elightup/twig/zipball/588a9d55508d383de47cade5cb0049c809f4750f",
+                "reference": "588a9d55508d383de47cade5cb0049c809f4750f",
+                "shasum": ""
+            },
+            "time": "2025-03-17T09:08:24+00:00",
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "mozart": {
+                    "packages": [
+                        "twig/twig"
+                    ],
+                    "dep_directory": "/",
+                    "dep_namespace": "eLightUp\\",
+                    "classmap_prefix": "eLightUp_",
+                    "classmap_directory": "/",
+                    "delete_vendor_directories": true
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "eLightUp\\": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "support": {
+                "source": "https://github.com/elightup/twig/tree/master"
+            },
+            "install-path": "../elightup/twig"
+        },
+        {
+            "name": "riimu/kit-phpencoder",
+            "version": "v2.4.2",
+            "version_normalized": "2.4.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Riimu/Kit-PHPEncoder.git",
+                "reference": "72ff7825de193b272e17b228394819dbfc638e72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Riimu/Kit-PHPEncoder/zipball/72ff7825de193b272e17b228394819dbfc638e72",
+                "reference": "72ff7825de193b272e17b228394819dbfc638e72",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "time": "2022-12-10T18:12:25+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Riimu\\Kit\\PHPEncoder\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Riikka Kalliomäki",
+                    "email": "riikka.kalliomaki@gmail.com",
+                    "homepage": "http://riimu.net"
+                }
+            ],
+            "description": "Highly customizable alternative to var_export for PHP code generation",
+            "homepage": "http://kit.riimu.net",
+            "keywords": [
+                "code",
+                "encoder",
+                "export",
+                "generator",
+                "variable"
+            ],
+            "support": {
+                "issues": "https://github.com/Riimu/Kit-PHPEncoder/issues",
+                "source": "https://github.com/Riimu/Kit-PHPEncoder/tree/v2.4.2"
+            },
+            "install-path": "../riimu/kit-phpencoder"
+        },
+        {
+            "name": "wpmetabox/mbb-parser",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wpmetabox/mbb-parser.git",
+                "reference": "c07a1acbbff855cfaeef0169ead30aabe5786b99"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/c07a1acbbff855cfaeef0169ead30aabe5786b99",
+                "reference": "c07a1acbbff855cfaeef0169ead30aabe5786b99",
+                "shasum": ""
+            },
+            "require": {
+                "riimu/kit-phpencoder": "^2.4",
+                "wpmetabox/support": "dev-master"
+            },
+            "time": "2025-10-06T02:28:32+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "MBBParser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Parse meta box settings from JSON",
+            "support": {
+                "issues": "https://github.com/wpmetabox/mbb-parser/issues",
+                "source": "https://github.com/wpmetabox/mbb-parser/tree/master"
+            },
+            "install-path": "../wpmetabox/mbb-parser"
+        },
+        {
+            "name": "wpmetabox/support",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wpmetabox/support.git",
+                "reference": "6c392347cdb77ed133b8a4227b5ee20db89a5717"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wpmetabox/support/zipball/6c392347cdb77ed133b8a4227b5ee20db89a5717",
+                "reference": "6c392347cdb77ed133b8a4227b5ee20db89a5717",
+                "shasum": ""
+            },
+            "time": "2025-09-12T23:29:48+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "MetaBox\\Support\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Helpers for Meta Box plugins",
+            "homepage": "https://metabox.io",
+            "support": {
+                "issues": "https://github.com/wpmetabox/support/issues",
+                "source": "https://github.com/wpmetabox/support/tree/master"
+            },
+            "install-path": "../wpmetabox/support"
+        }
+    ],
+    "dev": false,
+    "dev-package-names": []
+}
