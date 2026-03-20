@@ -37,6 +37,20 @@ done
 echo "WordPress is ready."
 
 # ---------------------------------------------------------------------------
+# Task 2b: Install WP library plugins
+# ---------------------------------------------------------------------------
+section "Task 2b: Install WP library plugins"
+
+WP_LIBRARY_PLUGINS=(mb-custom-post-type mb-relationships)
+for plugin in "${WP_LIBRARY_PLUGINS[@]}"; do
+    if $WP plugin is-installed "$plugin" 2>/dev/null; then
+        echo "  ✓ $plugin (already installed)"
+    else
+        $WP plugin install "$plugin" && echo "  → Installed $plugin" || echo "  ✗ Failed to install $plugin"
+    fi
+done
+
+# ---------------------------------------------------------------------------
 # Task 3: Activate all plugins for schema import
 # ---------------------------------------------------------------------------
 section "Task 3: Activate all plugins for schema import"
@@ -48,6 +62,9 @@ ALL_PLUGINS=(
     jet-engine
     meta-box
     meta-box-aio
+    meta-box-builder
+    mb-custom-post-type
+    mb-relationships
 )
 
 echo "Activating all plugins for schema import..."
