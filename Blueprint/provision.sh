@@ -205,6 +205,7 @@ else
 
                 if (isset(\$post['settings'])) {
                     \$post['post_content'] = wp_json_encode(\$post['settings'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                    unset(\$post['settings']);
                 }
                 \$post['post_status'] = 'publish';
                 wp_insert_post(\$post);
