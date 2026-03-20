@@ -46,13 +46,13 @@ func init() {
 func runInteractive() error {
 	// Main menu
 	mainItems := []tui.MenuItem{
+		{Label: "Destroy (remove all)", Key: "destroy"},
 		{Label: "Provision (full setup)", Key: "provision"},
 		{Label: "Up (start containers)", Key: "up"},
 		{Label: "Reset (restore snapshot)", Key: "reset"},
 		{Label: "Snapshot (save DB)", Key: "snapshot"},
 		{Label: "Status", Key: "status"},
 		{Label: "Down (stop)", Key: "down"},
-		{Label: "Destroy (remove all)", Key: "destroy"},
 		{Label: "Logs", Key: "logs"},
 	}
 
@@ -67,8 +67,8 @@ func runInteractive() error {
 		return nil
 	}
 
-	// WPfaker mode selection for provision/up
-	if chosen == "provision" || chosen == "up" {
+	// WPfaker mode selection for up only (provision uses startProvisionFlow)
+	if chosen == "up" {
 		wpfakerItems := []tui.MenuItem{
 			{Label: "None (test plugins only)", Key: "none"},
 			{Label: "Local (mount ~/Projects/wpfaker)", Key: "local"},
@@ -119,33 +119,10 @@ func runInteractive() error {
 		}
 	}
 
-	// Plugin selection for provision
-	if chosen == "provision" {
-		pluginItems := []tui.ChecklistItem{
-			{Label: "ACF Pro", Key: "advanced-custom-fields-pro"},
-			{Label: "ACPT", Key: "advanced-custom-post-type"},
-			{Label: "CPT UI", Key: "custom-post-type-ui"},
-			{Label: "JetEngine", Key: "jet-engine"},
-			{Label: "Meta Box", Key: "meta-box"},
-			{Label: "Meta Box AIO", Key: "meta-box-aio"},
-		}
-		cl := tui.NewChecklistModel("Which test plugins should be activated?", pluginItems)
-		p3 := tea.NewProgram(cl)
-		result3, err := p3.Run()
-		if err != nil {
-			return err
-		}
-		clModel := result3.(tui.ChecklistModel)
-		if clModel.Cancelled() {
-			return nil
-		}
-		pluginsFlag = strings.Join(clModel.Selected(), ",")
-	}
-
 	// Dispatch to the correct subcommand
 	switch chosen {
 	case "provision":
-		return provisionCmd.RunE(provisionCmd, nil)
+		return startProvisionFlow()
 	case "up":
 		return upCmd.RunE(upCmd, nil)
 	case "down":
@@ -162,6 +139,108 @@ func runInteractive() error {
 		return logsCmd.RunE(logsCmd, nil)
 	}
 	return nil
+}
+
+// startProvisionFlow runs the interactive provision prompts (WPfaker mode,
+// worktree selection, plugin selection) and then executes the provision command.
+func startProvisionFlow() error {
+	// WPfaker mode selection
+	wpfakerItems := []tui.MenuItem{
+		{Label: "None (test plugins only)", Key: "none"},
+		{Label: "Local (mount ~/Projects/wpfaker)", Key: "local"},
+		{Label: "Zip (install from dist/)", Key: "zip"},
+	}
+	wpMenu := tui.NewMenuModel("WPfaker Mode", wpfakerItems)
+	p := tea.NewProgram(wpMenu)
+	result, err := p.Run()
+	if err != nil {
+		return err
+	}
+	wpChosen := result.(tui.MenuModel).Chosen()
+	if wpChosen == "" {
+		return nil
+	}
+	wpfakerFlag = wpChosen
+
+	// Worktree/branch selection for local mode
+	if wpfakerFlag == "local" {
+		paths, err := config.NewPaths()
+		if err != nil {
+			return err
+		}
+		worktrees := paths.DetectWorktrees()
+		if len(worktrees) > 1 {
+			var wtItems []tui.MenuItem
+			for _, wt := range worktrees {
+				label := wt.Branch
+				if wt.Path == paths.WPfaker {
+					label += "  (main repo)"
+				} else {
+					label += fmt.Sprintf("  (%s)", wt.Path)
+				}
+				wtItems = append(wtItems, tui.MenuItem{Label: label, Key: wt.Path})
+			}
+			wtMenu := tui.NewMenuModel("Select WPfaker branch", wtItems)
+			p2 := tea.NewProgram(wtMenu)
+			result2, err := p2.Run()
+			if err != nil {
+				return err
+			}
+			wtChosen := result2.(tui.MenuModel).Chosen()
+			if wtChosen == "" {
+				return nil
+			}
+			wpfakerDirFlag = wtChosen
+		}
+	}
+
+	// Meta Box variant selection
+	mbItems := []tui.MenuItem{
+		{Label: "Meta Box AIO (all-in-one)", Key: "aio"},
+		{Label: "Meta Box (individual plugins)", Key: "standalone"},
+		{Label: "None", Key: "none"},
+	}
+	mbMenu := tui.NewMenuModel("Meta Box variant", mbItems)
+	pMB := tea.NewProgram(mbMenu)
+	resultMB, err := pMB.Run()
+	if err != nil {
+		return err
+	}
+	mbChosen := resultMB.(tui.MenuModel).Chosen()
+	if mbChosen == "" {
+		return nil
+	}
+
+	// Plugin selection (without Meta Box entries)
+	pluginItems := []tui.ChecklistItem{
+		{Label: "ACF Pro", Key: "advanced-custom-fields-pro"},
+		{Label: "ACPT", Key: "advanced-custom-post-type"},
+		{Label: "CPT UI", Key: "custom-post-type-ui"},
+		{Label: "JetEngine", Key: "jet-engine"},
+	}
+	cl := tui.NewChecklistModel("Which test plugins should be activated?", pluginItems)
+	p3 := tea.NewProgram(cl)
+	result3, err := p3.Run()
+	if err != nil {
+		return err
+	}
+	clModel := result3.(tui.ChecklistModel)
+	if clModel.Cancelled() {
+		return nil
+	}
+	selected := clModel.Selected()
+
+	// Append Meta Box plugins based on variant
+	switch mbChosen {
+	case "aio":
+		selected = append(selected, "meta-box", "meta-box-aio")
+	case "standalone":
+		selected = append(selected, "meta-box", "mb-custom-post-type", "meta-box-builder", "mb-relationships")
+	}
+
+	pluginsFlag = strings.Join(selected, ",")
+
+	return provisionCmd.RunE(provisionCmd, nil)
 }
 
 // --- provision ---
@@ -316,7 +395,24 @@ var destroyCmd = &cobra.Command{
 			return err
 		}
 		fmt.Println("  All containers and volumes destroyed.")
-		return nil
+
+		// Ask if user wants to provision immediately (default: yes)
+		confirmItems := []tui.MenuItem{
+			{Label: "Yes", Key: "yes"},
+			{Label: "No", Key: "no"},
+		}
+		confirmMenu := tui.NewMenuModel("Provision new environment?", confirmItems)
+		p := tea.NewProgram(confirmMenu)
+		result, err := p.Run()
+		if err != nil {
+			return err
+		}
+		if result.(tui.MenuModel).Chosen() != "yes" {
+			return nil
+		}
+
+		// Jump into the provision flow (WPfaker mode → worktree → plugins → provision)
+		return startProvisionFlow()
 	},
 }
 
