@@ -1,0 +1,48 @@
+[
+    {
+        "post_title": "Recipes to Chefs",
+        "post_type": "mb-relationship",
+        "post_date": "2026-03-20 00:00:00",
+        "post_status": "publish",
+        "settings": {
+            "id": "recipes-to-chefs",
+            "from": {
+                "object_type": "post",
+                "post_type": ["recipe"],
+                "meta_box": {
+                    "title": "Chefs"
+                }
+            },
+            "to": {
+                "object_type": "post",
+                "post_type": ["chef"],
+                "meta_box": {
+                    "title": "Recipes"
+                }
+            }
+        }
+    },
+    {
+        "post_title": "Recipes to Cookbooks",
+        "post_type": "mb-relationship",
+        "post_date": "2026-03-20 00:00:00",
+        "post_status": "publish",
+        "settings": {
+            "id": "recipes-to-cookbooks",
+            "from": {
+                "object_type": "post",
+                "post_type": ["recipe"],
+                "meta_box": {
+                    "title": "Cookbooks"
+                }
+            },
+            "to": {
+                "object_type": "post",
+                "post_type": ["cookbook"],
+                "meta_box": {
+                    "title": "Recipes"
+                }
+            }
+        }
+    }
+]
