@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "instawp": {
+      "type": "sse",
+      "url": "https://wpfaker.instawp.dev/insta-mcp?t=d3ae6a9d480a707da4cf03e57f725832a385816f152d276623c2562553899d65"
+    }
+  }
+}

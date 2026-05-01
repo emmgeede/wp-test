@@ -41,12 +41,13 @@ func ProjectRoot() (string, error) {
 }
 
 type Paths struct {
-	Root      string // wp-test project root
-	Blueprint string // Blueprint/ source-of-truth
-	Docker    string // Docker/ runtime directory
-	Snapshots string // snapshots/ directory
-	Golden    string // snapshots/golden.sql.gz
-	WPfaker   string // ~/Projects/wpfaker (local dev)
+	Root        string // wp-test project root
+	Blueprint   string // Blueprint/ source-of-truth
+	Docker      string // Docker/ runtime directory
+	Snapshots   string // snapshots/ directory
+	Golden      string // snapshots/golden.sql.gz
+	WPfaker     string // ~/Projects/wpfaker (local dev)
+	WPfakerFree string // ~/Projects/wpfaker-free (local dev)
 }
 
 func NewPaths() (*Paths, error) {
@@ -59,12 +60,13 @@ func NewPaths() (*Paths, error) {
 		return nil, err
 	}
 	return &Paths{
-		Root:      root,
-		Blueprint: filepath.Join(root, "Blueprint"),
-		Docker:    filepath.Join(root, "Docker"),
-		Snapshots: filepath.Join(root, "snapshots"),
-		Golden:    filepath.Join(root, "snapshots", "golden.sql.gz"),
-		WPfaker:   filepath.Join(home, "Projects", "wpfaker"),
+		Root:        root,
+		Blueprint:   filepath.Join(root, "Blueprint"),
+		Docker:      filepath.Join(root, "Docker"),
+		Snapshots:   filepath.Join(root, "snapshots"),
+		Golden:      filepath.Join(root, "snapshots", "golden.sql.gz"),
+		WPfaker:     filepath.Join(home, "Projects", "wpfaker"),
+		WPfakerFree: filepath.Join(home, "Projects", "wpfaker-free"),
 	}, nil
 }
 
@@ -81,10 +83,15 @@ type Worktree struct {
 	Branch string // branch name (e.g. "master", "feature/foo")
 }
 
-// DetectWorktrees returns all git worktrees for the WPfaker repo.
+// DetectWorktrees returns all git worktrees for the WPfaker (premium) repo.
 // The main worktree is always first. Returns nil if git fails.
 func (p *Paths) DetectWorktrees() []Worktree {
-	cmd := exec.Command("git", "-C", p.WPfaker, "worktree", "list", "--porcelain")
+	return p.DetectWorktreesFor(p.WPfaker)
+}
+
+// DetectWorktreesFor returns all git worktrees for the given repo path.
+func (p *Paths) DetectWorktreesFor(repoPath string) []Worktree {
+	cmd := exec.Command("git", "-C", repoPath, "worktree", "list", "--porcelain")
 	out, err := cmd.Output()
 	if err != nil {
 		return nil

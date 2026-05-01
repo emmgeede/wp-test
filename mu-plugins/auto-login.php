@@ -4,13 +4,19 @@
  * Logs in automatically when visiting wp-admin while not authenticated.
  */
 add_action('init', function () {
-    if (is_user_logged_in()) {
+    $request = $_SERVER['REQUEST_URI'] ?? '';
+
+    // Only trigger on admin/login pages
+    if (strpos($request, '/wp-admin') === false && strpos($request, '/wp-login.php') === false) {
         return;
     }
 
-    // Only trigger on admin/login pages
-    $request = $_SERVER['REQUEST_URI'] ?? '';
-    if (strpos($request, '/wp-admin') === false && strpos($request, '/wp-login.php') === false) {
+    // Already logged in — handle reauth redirect loop
+    if (is_user_logged_in()) {
+        if (strpos($request, '/wp-login.php') !== false && isset($_GET['reauth'])) {
+            wp_safe_redirect(admin_url());
+            exit;
+        }
         return;
     }
 

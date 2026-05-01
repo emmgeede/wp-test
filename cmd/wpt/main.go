@@ -34,13 +34,99 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	provisionCmd.Flags().StringVar(&wpfakerFlag, "wpfaker", "none", "WPfaker mode: none, local, zip")
+	provisionCmd.Flags().StringVar(&wpfakerFlag, "wpfaker", "none", "WPfaker mode: none, local, zip, free-local, free-zip")
 	provisionCmd.Flags().StringVar(&wpfakerDirFlag, "wpfaker-dir", "", "WPfaker source directory (worktree path)")
 	provisionCmd.Flags().StringVar(&pluginsFlag, "plugins", "", "Comma-separated plugins to activate")
-	upCmd.Flags().StringVar(&wpfakerFlag, "wpfaker", "none", "WPfaker mode: none, local")
+	upCmd.Flags().StringVar(&wpfakerFlag, "wpfaker", "none", "WPfaker mode: none, local, zip, free-local, free-zip")
 	upCmd.Flags().StringVar(&wpfakerDirFlag, "wpfaker-dir", "", "WPfaker source directory (worktree path)")
 
 	rootCmd.AddCommand(provisionCmd, upCmd, downCmd, resetCmd, snapshotCmd, destroyCmd, statusCmd, logsCmd)
+}
+
+// selectWPfakerMode runs the interactive WPfaker edition + mode + worktree selection.
+// Sets wpfakerFlag and wpfakerDirFlag. Returns false if user cancelled.
+func selectWPfakerMode() (bool, error) {
+	// Step 1: Edition selection
+	editionItems := []tui.MenuItem{
+		{Label: "Premium (~/Projects/wpfaker)", Key: "premium"},
+		{Label: "Free (~/Projects/wpfaker-free)", Key: "free"},
+		{Label: "None (test plugins only)", Key: "none"},
+	}
+	edMenu := tui.NewMenuModel("WPfaker Edition", editionItems)
+	p := tea.NewProgram(edMenu)
+	result, err := p.Run()
+	if err != nil {
+		return false, err
+	}
+	edition := result.(tui.MenuModel).Chosen()
+	if edition == "" {
+		return false, nil
+	}
+	if edition == "none" {
+		wpfakerFlag = "none"
+		return true, nil
+	}
+
+	// Step 2: Install mode
+	modeItems := []tui.MenuItem{
+		{Label: "Local (mount source directory)", Key: "local"},
+		{Label: "Zip (install from dist/)", Key: "zip"},
+	}
+	modeMenu := tui.NewMenuModel("Install Mode", modeItems)
+	p2 := tea.NewProgram(modeMenu)
+	result2, err := p2.Run()
+	if err != nil {
+		return false, err
+	}
+	modeChosen := result2.(tui.MenuModel).Chosen()
+	if modeChosen == "" {
+		return false, nil
+	}
+
+	// Combine edition + mode into WPfakerMode
+	if edition == "premium" {
+		wpfakerFlag = modeChosen // "local" or "zip"
+	} else {
+		wpfakerFlag = "free-" + modeChosen // "free-local" or "free-zip"
+	}
+
+	// Step 3: Worktree selection (only for local mode)
+	if modeChosen == "local" {
+		paths, err := config.NewPaths()
+		if err != nil {
+			return false, err
+		}
+		repoPath := paths.WPfaker
+		if edition == "free" {
+			repoPath = paths.WPfakerFree
+		}
+		worktrees := paths.DetectWorktreesFor(repoPath)
+		if len(worktrees) > 1 {
+			var wtItems []tui.MenuItem
+			for _, wt := range worktrees {
+				label := wt.Branch
+				if wt.Path == repoPath {
+					label += "  (main repo)"
+				} else {
+					label += fmt.Sprintf("  (%s)", wt.Path)
+				}
+				wtItems = append(wtItems, tui.MenuItem{Label: label, Key: wt.Path})
+			}
+			wtMenu := tui.NewMenuModel("Select branch", wtItems)
+			p3 := tea.NewProgram(wtMenu)
+			result3, err := p3.Run()
+			if err != nil {
+				return false, err
+			}
+			wtChosen := result3.(tui.MenuModel).Chosen()
+			if wtChosen == "" {
+				return false, nil
+			}
+			wpfakerDirFlag = wtChosen
+		}
+	}
+
+	return true, nil
 }
 
 func runInteractive() error {
@@ -69,53 +155,12 @@ func runInteractive() error {
 
 	// WPfaker mode selection for up only (provision uses startProvisionFlow)
 	if chosen == "up" {
-		wpfakerItems := []tui.MenuItem{
-			{Label: "None (test plugins only)", Key: "none"},
-			{Label: "Local (mount ~/Projects/wpfaker)", Key: "local"},
-			{Label: "Zip (install from dist/)", Key: "zip"},
-		}
-		wpMenu := tui.NewMenuModel("WPfaker Mode", wpfakerItems)
-		p2 := tea.NewProgram(wpMenu)
-		result2, err := p2.Run()
+		ok, err := selectWPfakerMode()
 		if err != nil {
 			return err
 		}
-		wpChosen := result2.(tui.MenuModel).Chosen()
-		if wpChosen == "" {
+		if !ok {
 			return nil
-		}
-		wpfakerFlag = wpChosen
-
-		// Worktree/branch selection for local mode
-		if wpfakerFlag == "local" {
-			paths, err := config.NewPaths()
-			if err != nil {
-				return err
-			}
-			worktrees := paths.DetectWorktrees()
-			if len(worktrees) > 1 {
-				var wtItems []tui.MenuItem
-				for _, wt := range worktrees {
-					label := wt.Branch
-					if wt.Path == paths.WPfaker {
-						label += "  (main repo)"
-					} else {
-						label += fmt.Sprintf("  (%s)", wt.Path)
-					}
-					wtItems = append(wtItems, tui.MenuItem{Label: label, Key: wt.Path})
-				}
-				wtMenu := tui.NewMenuModel("Select WPfaker branch", wtItems)
-				p3 := tea.NewProgram(wtMenu)
-				result3, err := p3.Run()
-				if err != nil {
-					return err
-				}
-				wtChosen := result3.(tui.MenuModel).Chosen()
-				if wtChosen == "" {
-					return nil
-				}
-				wpfakerDirFlag = wtChosen
-			}
 		}
 	}
 
@@ -141,82 +186,26 @@ func runInteractive() error {
 	return nil
 }
 
-// startProvisionFlow runs the interactive provision prompts (WPfaker mode,
-// worktree selection, plugin selection) and then executes the provision command.
+// startProvisionFlow runs the interactive provision prompts (WPfaker edition,
+// mode, worktree selection, plugin selection) and then executes the provision command.
 func startProvisionFlow() error {
-	// WPfaker mode selection
-	wpfakerItems := []tui.MenuItem{
-		{Label: "None (test plugins only)", Key: "none"},
-		{Label: "Local (mount ~/Projects/wpfaker)", Key: "local"},
-		{Label: "Zip (install from dist/)", Key: "zip"},
-	}
-	wpMenu := tui.NewMenuModel("WPfaker Mode", wpfakerItems)
-	p := tea.NewProgram(wpMenu)
-	result, err := p.Run()
+	// WPfaker edition + mode + worktree selection
+	ok, err := selectWPfakerMode()
 	if err != nil {
 		return err
 	}
-	wpChosen := result.(tui.MenuModel).Chosen()
-	if wpChosen == "" {
-		return nil
-	}
-	wpfakerFlag = wpChosen
-
-	// Worktree/branch selection for local mode
-	if wpfakerFlag == "local" {
-		paths, err := config.NewPaths()
-		if err != nil {
-			return err
-		}
-		worktrees := paths.DetectWorktrees()
-		if len(worktrees) > 1 {
-			var wtItems []tui.MenuItem
-			for _, wt := range worktrees {
-				label := wt.Branch
-				if wt.Path == paths.WPfaker {
-					label += "  (main repo)"
-				} else {
-					label += fmt.Sprintf("  (%s)", wt.Path)
-				}
-				wtItems = append(wtItems, tui.MenuItem{Label: label, Key: wt.Path})
-			}
-			wtMenu := tui.NewMenuModel("Select WPfaker branch", wtItems)
-			p2 := tea.NewProgram(wtMenu)
-			result2, err := p2.Run()
-			if err != nil {
-				return err
-			}
-			wtChosen := result2.(tui.MenuModel).Chosen()
-			if wtChosen == "" {
-				return nil
-			}
-			wpfakerDirFlag = wtChosen
-		}
-	}
-
-	// Meta Box variant selection
-	mbItems := []tui.MenuItem{
-		{Label: "Meta Box AIO (all-in-one)", Key: "aio"},
-		{Label: "Meta Box (individual plugins)", Key: "standalone"},
-		{Label: "None", Key: "none"},
-	}
-	mbMenu := tui.NewMenuModel("Meta Box variant", mbItems)
-	pMB := tea.NewProgram(mbMenu)
-	resultMB, err := pMB.Run()
-	if err != nil {
-		return err
-	}
-	mbChosen := resultMB.(tui.MenuModel).Chosen()
-	if mbChosen == "" {
+	if !ok {
 		return nil
 	}
 
-	// Plugin selection (without Meta Box entries)
+	// Plugin selection (Meta Box variant is part of the checklist)
 	pluginItems := []tui.ChecklistItem{
 		{Label: "ACF Pro", Key: "advanced-custom-fields-pro"},
 		{Label: "ACPT", Key: "advanced-custom-post-type"},
 		{Label: "CPT UI", Key: "custom-post-type-ui"},
 		{Label: "JetEngine", Key: "jet-engine"},
+		{Label: "Meta Box AIO (all-in-one)", Key: "meta-box-aio"},
+		{Label: "Meta Box (individual plugins)", Key: "meta-box-standalone"},
 	}
 	cl := tui.NewChecklistModel("Which test plugins should be activated?", pluginItems)
 	p3 := tea.NewProgram(cl)
@@ -230,15 +219,20 @@ func startProvisionFlow() error {
 	}
 	selected := clModel.Selected()
 
-	// Append Meta Box plugins based on variant
-	switch mbChosen {
-	case "aio":
-		selected = append(selected, "meta-box", "meta-box-aio")
-	case "standalone":
-		selected = append(selected, "meta-box", "mb-custom-post-type", "meta-box-builder", "mb-relationships")
+	// Expand Meta Box variant keys into actual plugin names
+	var expanded []string
+	for _, s := range selected {
+		switch s {
+		case "meta-box-aio":
+			expanded = append(expanded, "meta-box", "meta-box-aio")
+		case "meta-box-standalone":
+			expanded = append(expanded, "meta-box", "mb-custom-post-type", "meta-box-builder", "mb-relationships")
+		default:
+			expanded = append(expanded, s)
+		}
 	}
 
-	pluginsFlag = strings.Join(selected, ",")
+	pluginsFlag = strings.Join(expanded, ",")
 
 	return provisionCmd.RunE(provisionCmd, nil)
 }
@@ -411,7 +405,7 @@ var destroyCmd = &cobra.Command{
 			return nil
 		}
 
-		// Jump into the provision flow (WPfaker mode → worktree → plugins → provision)
+		// Jump into the provision flow (WPfaker edition → mode → worktree → plugins → provision)
 		return startProvisionFlow()
 	},
 }

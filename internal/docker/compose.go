@@ -14,9 +14,11 @@ import (
 type WPfakerMode string
 
 const (
-	WPfakerNone  WPfakerMode = "none"
-	WPfakerLocal WPfakerMode = "local"
-	WPfakerZip   WPfakerMode = "zip"
+	WPfakerNone      WPfakerMode = "none"
+	WPfakerLocal     WPfakerMode = "local"
+	WPfakerZip       WPfakerMode = "zip"
+	WPfakerFreeLocal WPfakerMode = "free-local"
+	WPfakerFreeZip   WPfakerMode = "free-zip"
 )
 
 // Compose runs docker compose commands in the Docker/ directory.
@@ -24,10 +26,20 @@ type Compose struct {
 	paths      *config.Paths
 	mode       WPfakerMode
 	wpfakerDir string // absolute path to WPfaker source (for local mode)
+	plugins    string // comma-separated list of selected plugins
 }
 
 func NewCompose(paths *config.Paths, mode WPfakerMode) *Compose {
-	return &Compose{paths: paths, mode: mode, wpfakerDir: paths.WPfaker}
+	dir := paths.WPfaker
+	if mode == WPfakerFreeLocal || mode == WPfakerFreeZip {
+		dir = paths.WPfakerFree
+	}
+	return &Compose{paths: paths, mode: mode, wpfakerDir: dir}
+}
+
+// SetPlugins sets the selected plugins for filtering volume mounts.
+func (c *Compose) SetPlugins(plugins string) {
+	c.plugins = plugins
 }
 
 // SetWPfakerDir overrides the WPfaker source directory (for worktree support).
@@ -38,8 +50,11 @@ func (c *Compose) SetWPfakerDir(dir string) {
 // composeArgs returns the -f flags for docker compose.
 func (c *Compose) composeArgs() []string {
 	args := []string{"-f", "docker-compose.yml"}
-	if c.mode == WPfakerLocal {
+	switch c.mode {
+	case WPfakerLocal:
 		args = append(args, "-f", "docker-compose.wpfaker.yml")
+	case WPfakerFreeLocal:
+		args = append(args, "-f", "docker-compose.wpfaker-free.yml")
 	}
 	return args
 }
@@ -56,9 +71,21 @@ func (c *Compose) Run(args ...string) (string, error) {
 	return strings.TrimSpace(string(out)), err
 }
 
+// pluginVolumeDirs maps plugin slugs to Testplugins/ directory names.
+// Only plugins listed here are mounted as volumes.
+var pluginVolumeDirs = map[string]string{
+	"advanced-custom-fields-pro": "advanced-custom-fields-pro",
+	"advanced-custom-post-type":  "advanced-custom-post-type",
+	"custom-post-type-ui":        "custom-post-type-ui",
+	"jet-engine":                 "jet-engine",
+	"meta-box":                   "meta-box",
+	"meta-box-aio":               "meta-box-aio",
+	"meta-box-builder":           "meta-box-builder",
+}
+
 // CopyBlueprint copies Blueprint/ files to Docker/.
-// For local mode, it rewrites the WPfaker mount path in docker-compose.wpfaker.yml
-// to point to the selected worktree/branch directory.
+// Filters docker-compose.yml to only mount selected plugin volumes.
+// For local mode, rewrites the WPfaker mount path in docker-compose.wpfaker.yml.
 func (c *Compose) CopyBlueprint() error {
 	if err := os.MkdirAll(c.paths.Docker, 0o755); err != nil {
 		return err
@@ -66,6 +93,7 @@ func (c *Compose) CopyBlueprint() error {
 	files := []string{
 		"docker-compose.yml",
 		"docker-compose.wpfaker.yml",
+		"docker-compose.wpfaker-free.yml",
 		"Caddyfile",
 		"wp-setup.sh",
 		"php-uploads.ini",
@@ -82,11 +110,49 @@ func (c *Compose) CopyBlueprint() error {
 		if f == "docker-compose.wpfaker.yml" && c.mode == WPfakerLocal && c.wpfakerDir != c.paths.WPfaker {
 			data = []byte(strings.ReplaceAll(string(data), "../../wpfaker", c.wpfakerDir))
 		}
+		if f == "docker-compose.wpfaker-free.yml" && c.mode == WPfakerFreeLocal && c.wpfakerDir != c.paths.WPfakerFree {
+			data = []byte(strings.ReplaceAll(string(data), "../../wpfaker-free", c.wpfakerDir))
+		}
+		// Filter plugin volume mounts based on selected plugins
+		if f == "docker-compose.yml" && c.plugins != "" {
+			data = []byte(c.filterPluginVolumes(string(data)))
+		}
 		if err := os.WriteFile(dst, data, 0o644); err != nil {
 			return fmt.Errorf("write %s: %w", f, err)
 		}
 	}
 	return nil
+}
+
+// filterPluginVolumes removes volume mount lines for plugins that are not selected.
+func (c *Compose) filterPluginVolumes(content string) string {
+	lines := strings.Split(content, "\n")
+	var result []string
+	for _, line := range lines {
+		if c.isUnselectedPluginMount(line) {
+			continue // skip this volume mount
+		}
+		result = append(result, line)
+	}
+	return strings.Join(result, "\n")
+}
+
+// isUnselectedPluginMount checks if a line is a volume mount for a plugin not in the selected list.
+func (c *Compose) isUnselectedPluginMount(line string) bool {
+	trimmed := strings.TrimSpace(line)
+	if !strings.Contains(trimmed, "Testplugins/") {
+		return false
+	}
+	for slug, dir := range pluginVolumeDirs {
+		if strings.Contains(trimmed, "Testplugins/"+dir) {
+			// This line mounts this plugin — check if it's selected
+			if !strings.Contains(c.plugins, slug) {
+				return true // not selected → remove
+			}
+			return false // selected → keep
+		}
+	}
+	return false
 }
 
 // Up starts containers.

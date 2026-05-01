@@ -23,6 +23,7 @@ func ProvisionSteps(paths *config.Paths, mode WPfakerMode, plugins string, wpfak
 	if wpfakerDir != "" {
 		compose.SetWPfakerDir(wpfakerDir)
 	}
+	compose.SetPlugins(plugins)
 	steps := []ProvisionStep{
 		{
 			Name: "Copying Blueprint files",

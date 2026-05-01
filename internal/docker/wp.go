@@ -79,21 +79,27 @@ func PluginList() (string, error) {
 
 // InstallWPfakerFromZip copies the latest zip into the container and installs it.
 func InstallWPfakerFromZip(wpfakerDir string) (string, error) {
-	// Find latest zip
+	return installPluginZip(wpfakerDir, "wpfaker-*.zip")
+}
+
+// InstallWPfakerFreeFromZip copies the latest free zip into the container and installs it.
+func InstallWPfakerFreeFromZip(wpfakerFreeDir string) (string, error) {
+	return installPluginZip(wpfakerFreeDir, "wpfaker-lite-*.zip")
+}
+
+func installPluginZip(dir, pattern string) (string, error) {
 	cmd := exec.Command("bash", "-c",
-		fmt.Sprintf("ls -t %s/dist/wpfaker-*.zip 2>/dev/null | head -1", wpfakerDir))
+		fmt.Sprintf("ls -t %s/dist/%s 2>/dev/null | head -1", dir, pattern))
 	out, err := cmd.Output()
 	zipPath := strings.TrimSpace(string(out))
 	if err != nil || zipPath == "" {
-		return "", fmt.Errorf("no zip found in %s/dist/ — run 'npm run build' in wpfaker first", wpfakerDir)
+		return "", fmt.Errorf("no zip found in %s/dist/%s — run 'npm run build' first", dir, pattern)
 	}
 
-	// Copy into container
-	copyCmd := exec.Command("docker", "cp", zipPath, config.ContainerWP+":/tmp/wpfaker.zip")
+	copyCmd := exec.Command("docker", "cp", zipPath, config.ContainerWP+":/tmp/plugin.zip")
 	if err := copyCmd.Run(); err != nil {
 		return "", fmt.Errorf("docker cp failed: %w", err)
 	}
 
-	// Install and activate
-	return WP("plugin", "install", "/tmp/wpfaker.zip", "--activate", "--force")
+	return WP("plugin", "install", "/tmp/plugin.zip", "--activate", "--force")
 }

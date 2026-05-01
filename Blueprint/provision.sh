@@ -24,6 +24,11 @@ check_container() {
     fi
 }
 
+# Check if a plugin (or prefix) is in the ACTIVATE_PLUGINS list
+is_selected() {
+    echo "${ACTIVATE_PLUGINS:-}" | grep -q "$1"
+}
+
 # ---------------------------------------------------------------------------
 # Preflight
 # ---------------------------------------------------------------------------
@@ -41,19 +46,23 @@ echo "WordPress is ready."
 # ---------------------------------------------------------------------------
 section "Task 2b: Install WP library plugins"
 
-WP_LIBRARY_PLUGINS=(mb-custom-post-type mb-relationships)
-for plugin in "${WP_LIBRARY_PLUGINS[@]}"; do
-    if $WP plugin is-installed "$plugin" 2>/dev/null; then
-        echo "  ✓ $plugin (already installed)"
-    else
-        $WP plugin install "$plugin" && echo "  → Installed $plugin" || echo "  ✗ Failed to install $plugin"
-    fi
-done
+if is_selected "mb-custom-post-type"; then
+    WP_LIBRARY_PLUGINS=(mb-custom-post-type mb-relationships)
+    for plugin in "${WP_LIBRARY_PLUGINS[@]}"; do
+        if $WP plugin is-installed "$plugin" 2>/dev/null; then
+            echo "  ✓ $plugin (already installed)"
+        else
+            $WP plugin install "$plugin" && echo "  → Installed $plugin" || echo "  ✗ Failed to install $plugin"
+        fi
+    done
+else
+    echo "No WP library plugins needed for selected plugins."
+fi
 
 # ---------------------------------------------------------------------------
 # Task 3: Activate all plugins for schema import
 # ---------------------------------------------------------------------------
-section "Task 3: Activate all plugins for schema import"
+section "Task 3: Activate selected plugins for schema import"
 
 ALL_PLUGINS=(
     advanced-custom-fields-pro
@@ -67,20 +76,29 @@ ALL_PLUGINS=(
     mb-relationships
 )
 
-echo "Activating all plugins for schema import..."
-for plugin in "${ALL_PLUGINS[@]}"; do
-    if $WP plugin is-active "$plugin" 2>/dev/null; then
-        echo "  ✓ $plugin (already active)"
-    else
-        $WP plugin activate "$plugin" 2>/dev/null && echo "  → Activated $plugin" || echo "  ✗ Failed to activate $plugin"
-    fi
-done
+if [ -n "${ACTIVATE_PLUGINS:-}" ]; then
+    echo "Activating selected plugins..."
+    IFS=',' read -ra SELECTED <<< "$ACTIVATE_PLUGINS"
+    for plugin in "${SELECTED[@]}"; do
+        plugin=$(echo "$plugin" | xargs)
+        if $WP plugin is-active "$plugin" 2>/dev/null; then
+            echo "  ✓ $plugin (already active)"
+        else
+            $WP plugin activate "$plugin" 2>/dev/null && echo "  → Activated $plugin" || echo "  ✗ $plugin not installed or failed"
+        fi
+    done
+else
+    echo "No plugins selected."
+fi
 
 # ---------------------------------------------------------------------------
 # Task 4: Import ACF Pro schemas (Movies + Recipes)
 # ---------------------------------------------------------------------------
 section "Task 4: Import ACF Pro field groups"
 
+if ! is_selected "advanced-custom-fields-pro"; then
+    echo "ACF Pro not selected, skipping."
+else
 $WP eval "
     \$json = file_get_contents('/tmp/import-data/acf-export-2026-03-07.json');
     if (!\$json) { echo 'ERROR: Could not read ACF export file'; exit(1); }
@@ -103,12 +121,16 @@ $WP eval "
     }
     echo \$counts['group'] . ' field group(s), ' . \$counts['post_type'] . ' post type(s), ' . \$counts['taxonomy'] . ' taxonomy(ies) imported';
 "
+fi
 
 # ---------------------------------------------------------------------------
 # Task 5: Import CPTUI schemas (Movies + Recipes)
 # ---------------------------------------------------------------------------
 section "Task 5: Import CPTUI post types and taxonomies"
 
+if ! is_selected "custom-post-type-ui"; then
+    echo "CPTUI not selected, skipping."
+else
 $WP eval "
     // Import post types
     \$existing_cpts = get_option('cptui_post_types', []);
@@ -136,6 +158,7 @@ $WP eval "
         echo 'No CPTUI taxonomies file found (skipping).';
     }
 "
+fi
 
 # ---------------------------------------------------------------------------
 # Task 6: Import Meta Box schemas (Movies + Recipes)
@@ -203,12 +226,28 @@ else
                 ]);
                 if (!empty(\$existing)) { continue; }
 
-                if (isset(\$post['settings'])) {
-                    \$post['post_content'] = wp_json_encode(\$post['settings'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-                    unset(\$post['settings']);
-                }
+                \$settings = \$post['settings'] ?? null;
+                unset(\$post['settings']);
                 \$post['post_status'] = 'publish';
-                wp_insert_post(\$post);
+
+                if (\$settings && \$post['post_type'] === 'meta-box') {
+                    // MB Builder reads 'meta_box' meta key (full config incl. fields)
+                    // and 'settings' meta key (additional settings without fields)
+                    \$meta_box_config = \$settings; // full config including fields
+                    \$settings_only = \$settings;
+                    unset(\$settings_only['fields']);
+                    \$post['post_content'] = '';
+                    \$post_id = wp_insert_post(\$post);
+                    if (\$post_id && !is_wp_error(\$post_id)) {
+                        update_post_meta(\$post_id, 'meta_box', \$meta_box_config);
+                        update_post_meta(\$post_id, 'settings', \$settings_only);
+                    }
+                } else {
+                    if (\$settings) {
+                        \$post['post_content'] = wp_json_encode(\$settings, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                    }
+                    wp_insert_post(\$post);
+                }
                 \$imported++;
             }
             echo '$label: ' . \$imported . ' imported, ' . (count(\$posts) - \$imported) . ' skipped (duplicates)';
@@ -221,6 +260,9 @@ fi
 # ---------------------------------------------------------------------------
 section "Task 7: Import JetEngine schemas"
 
+if ! is_selected "jet-engine"; then
+    echo "JetEngine not selected, skipping."
+else
 $WP eval "
     \$skin_file = WP_PLUGIN_DIR . '/jet-engine/includes/dashboard/skins-import.php';
     if (!file_exists(\$skin_file)) {
@@ -255,51 +297,34 @@ $WP eval "
     }
     echo 'JetEngine import complete.';
 "
+fi
 
 # ---------------------------------------------------------------------------
 # Task 8: Import ACPT schemas (Movies + Recipes)
 # ---------------------------------------------------------------------------
 section "Task 8: Import ACPT schemas"
 
+if ! is_selected "advanced-custom-post-type"; then
+    echo "ACPT not selected, skipping."
+else
 $WP eval-file /tmp/acpt-import.php
+fi
 
 # ---------------------------------------------------------------------------
 # Task 9: Set final plugin state
 # ---------------------------------------------------------------------------
-section "Task 9: Set final plugin state"
+section "Task 9: Verify final plugin state"
 
-# Deactivate all test plugins first
-echo "Deactivating all test plugins..."
-for plugin in "${ALL_PLUGINS[@]}"; do
-    if $WP plugin is-active "$plugin" 2>/dev/null; then
-        $WP plugin deactivate "$plugin" 2>/dev/null
-    fi
-done
-
-# Activate only selected plugins
-if [ -n "${ACTIVATE_PLUGINS:-}" ]; then
-    echo "Activating selected plugins..."
-    IFS=',' read -ra SELECTED <<< "$ACTIVATE_PLUGINS"
-    for plugin in "${SELECTED[@]}"; do
-        plugin=$(echo "$plugin" | xargs)  # trim whitespace
-        if $WP plugin activate "$plugin" 2>/dev/null; then
-            echo "  → Activated $plugin"
-        else
-            echo "  ✗ Failed to activate $plugin"
-        fi
-    done
-else
-    echo "No plugins selected for activation."
-fi
+echo "Selected plugins are already active from Task 3."
 
 # Install WPfaker based on WPFAKER env var
 case "${WPFAKER:-}" in
     local)
-        echo "Activating WPfaker (local mount)..."
+        echo "Activating WPfaker Premium (local mount)..."
         $WP plugin activate wpfaker && echo "  → Activated wpfaker (local)"
         ;;
     zip)
-        echo "Installing WPfaker from zip..."
+        echo "Installing WPfaker Premium from zip..."
         WPFAKER_ZIP=$(ls -t /home/emmgee/Projects/wpfaker/dist/wpfaker-*.zip 2>/dev/null | head -1)
         if [ -z "$WPFAKER_ZIP" ]; then
             echo "  ✗ No zip found in ~/Projects/wpfaker/dist/ — run 'npm run build' in wpfaker first"
@@ -308,8 +333,22 @@ case "${WPFAKER:-}" in
             $WP plugin install /tmp/wpfaker.zip --activate --force && echo "  → Installed wpfaker from $(basename "$WPFAKER_ZIP")"
         fi
         ;;
+    free-local)
+        echo "Activating WPfaker Lite (local mount)..."
+        $WP plugin activate wpfaker-lite && echo "  → Activated wpfaker-lite (local)"
+        ;;
+    free-zip)
+        echo "Installing WPfaker Lite from zip..."
+        WPFAKER_ZIP=$(ls -t /home/emmgee/Projects/wpfaker-free/dist/wpfaker-lite-*.zip 2>/dev/null | head -1)
+        if [ -z "$WPFAKER_ZIP" ]; then
+            echo "  ✗ No zip found in ~/Projects/wpfaker-free/dist/ — run 'npm run build' in wpfaker-free first"
+        else
+            docker cp "$WPFAKER_ZIP" wpt-wordpress:/tmp/wpfaker-lite.zip
+            $WP plugin install /tmp/wpfaker-lite.zip --activate --force && echo "  → Installed wpfaker-lite from $(basename "$WPFAKER_ZIP")"
+        fi
+        ;;
     *)
-        echo "No WPfaker requested (use WPFAKER=local or WPFAKER=zip)"
+        echo "No WPfaker requested"
         ;;
 esac
 
