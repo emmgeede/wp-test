@@ -28,7 +28,7 @@ func ProjectRoot() (string, error) {
 		}
 	}
 
-	// Fallback: ~/Projects/wp-test
+	// Fallback: ~/Projects/wp-test (legacy layout)
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", err
@@ -37,6 +37,13 @@ func ProjectRoot() (string, error) {
 	if _, err := os.Stat(filepath.Join(fallback, "Blueprint")); err == nil {
 		return fallback, nil
 	}
+
+	// Fallback: current Johnny-Decimal location
+	jdFallback := "/home/mg/ownCloud/40-49-Development/46-Tooling/wp-test"
+	if _, err := os.Stat(filepath.Join(jdFallback, "Blueprint")); err == nil {
+		return jdFallback, nil
+	}
+
 	return "", fmt.Errorf("could not find wp-test project root (no Blueprint/ directory found)")
 }
 
@@ -66,7 +73,7 @@ func NewPaths() (*Paths, error) {
 		Snapshots:   filepath.Join(root, "snapshots"),
 		Golden:      filepath.Join(root, "snapshots", "golden.sql.gz"),
 		WPfaker:     filepath.Join(home, "Projects", "wpfaker"),
-		WPfakerFree: filepath.Join(home, "Projects", "wpfaker-free"),
+		WPfakerFree: "/home/mg/ownCloud/30-39-Business/31-Projects/31.11-WPFaker/wpfaker-free",
 	}, nil
 }
 

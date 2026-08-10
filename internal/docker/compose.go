@@ -111,7 +111,7 @@ func (c *Compose) CopyBlueprint() error {
 			data = []byte(strings.ReplaceAll(string(data), "../../wpfaker", c.wpfakerDir))
 		}
 		if f == "docker-compose.wpfaker-free.yml" && c.mode == WPfakerFreeLocal && c.wpfakerDir != c.paths.WPfakerFree {
-			data = []byte(strings.ReplaceAll(string(data), "../../wpfaker-free", c.wpfakerDir))
+			data = []byte(strings.ReplaceAll(string(data), c.paths.WPfakerFree, c.wpfakerDir))
 		}
 		// Filter plugin volume mounts based on selected plugins
 		if f == "docker-compose.yml" && c.plugins != "" {

@@ -334,17 +334,17 @@ case "${WPFAKER:-}" in
         fi
         ;;
     free-local)
-        echo "Activating WPfaker Lite (local mount)..."
-        $WP plugin activate wpfaker-lite && echo "  → Activated wpfaker-lite (local)"
+        echo "Activating Faker Studio Lite (local mount)..."
+        $WP plugin activate faker-studio-lite && echo "  → Activated faker-studio-lite (local)"
         ;;
     free-zip)
-        echo "Installing WPfaker Lite from zip..."
-        WPFAKER_ZIP=$(ls -t /home/emmgee/Projects/wpfaker-free/dist/wpfaker-lite-*.zip 2>/dev/null | head -1)
+        echo "Installing Faker Studio Lite from zip..."
+        WPFAKER_ZIP=$(ls -t /home/mg/ownCloud/30-39-Business/31-Projects/31.11-WPFaker/wpfaker-free/dist/faker-studio-lite-*.zip 2>/dev/null | head -1)
         if [ -z "$WPFAKER_ZIP" ]; then
-            echo "  ✗ No zip found in ~/Projects/wpfaker-free/dist/ — run 'npm run build' in wpfaker-free first"
+            echo "  ✗ No zip found in wpfaker-free/dist/ — run 'npm run build' in wpfaker-free first"
         else
-            docker cp "$WPFAKER_ZIP" wpt-wordpress:/tmp/wpfaker-lite.zip
-            $WP plugin install /tmp/wpfaker-lite.zip --activate --force && echo "  → Installed wpfaker-lite from $(basename "$WPFAKER_ZIP")"
+            docker cp "$WPFAKER_ZIP" wpt-wordpress:/tmp/faker-studio-lite.zip
+            $WP plugin install /tmp/faker-studio-lite.zip --activate --force && echo "  → Installed faker-studio-lite from $(basename "$WPFAKER_ZIP")"
         fi
         ;;
     *)

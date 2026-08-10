@@ -84,7 +84,7 @@ func InstallWPfakerFromZip(wpfakerDir string) (string, error) {
 
 // InstallWPfakerFreeFromZip copies the latest free zip into the container and installs it.
 func InstallWPfakerFreeFromZip(wpfakerFreeDir string) (string, error) {
-	return installPluginZip(wpfakerFreeDir, "wpfaker-lite-*.zip")
+	return installPluginZip(wpfakerFreeDir, "faker-studio-lite-*.zip")
 }
 
 func installPluginZip(dir, pattern string) (string, error) {
