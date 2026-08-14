@@ -29,7 +29,7 @@ up:
 	@cd $(DOCKER_DIR) && docker compose $(COMPOSE_FILES) up -d
 	@echo "Waiting for WordPress setup..."
 	@until $(WP) core is-installed 2>/dev/null; do sleep 2; done
-	@echo "WordPress is ready at http://wpfaker-test.dv:8089"
+	@echo "WordPress is ready at http://faker-studio-test.dv:8089"
 
 # Stop containers (keep volumes)
 down:

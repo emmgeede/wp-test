@@ -81,7 +81,7 @@ const (
 	ContainerWP    = "wpt-wordpress"
 	ContainerMySQL = "wpt-mysql"
 	ContainerCaddy = "wpt-caddy"
-	SiteURL        = "http://wpfaker.dv"
+	SiteURL        = "http://faker-studio.dv"
 )
 
 // Worktree represents a git worktree entry.
