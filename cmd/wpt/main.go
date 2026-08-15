@@ -15,8 +15,8 @@ import (
 	"github.com/emmgeede/wp-test/internal/tui"
 )
 
-var wpfakerFlag string
-var wpfakerDirFlag string
+var fakerStudioFlag string
+var fakerStudioDirFlag string
 var pluginsFlag string
 
 func main() {
@@ -34,25 +34,25 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	provisionCmd.Flags().StringVar(&wpfakerFlag, "wpfaker", "none", "WPfaker mode: none, local, zip, free-local, free-zip")
-	provisionCmd.Flags().StringVar(&wpfakerDirFlag, "wpfaker-dir", "", "WPfaker source directory (worktree path)")
+	provisionCmd.Flags().StringVar(&fakerStudioFlag, "faker-studio", "none", "FakerStudio mode: none, local, zip, free-local, free-zip")
+	provisionCmd.Flags().StringVar(&fakerStudioDirFlag, "faker-studio-dir", "", "FakerStudio source directory (worktree path)")
 	provisionCmd.Flags().StringVar(&pluginsFlag, "plugins", "", "Comma-separated plugins to activate")
-	upCmd.Flags().StringVar(&wpfakerFlag, "wpfaker", "none", "WPfaker mode: none, local, zip, free-local, free-zip")
-	upCmd.Flags().StringVar(&wpfakerDirFlag, "wpfaker-dir", "", "WPfaker source directory (worktree path)")
+	upCmd.Flags().StringVar(&fakerStudioFlag, "faker-studio", "none", "FakerStudio mode: none, local, zip, free-local, free-zip")
+	upCmd.Flags().StringVar(&fakerStudioDirFlag, "faker-studio-dir", "", "FakerStudio source directory (worktree path)")
 
 	rootCmd.AddCommand(provisionCmd, upCmd, downCmd, resetCmd, snapshotCmd, destroyCmd, statusCmd, logsCmd)
 }
 
-// selectWPfakerMode runs the interactive WPfaker edition + mode + worktree selection.
-// Sets wpfakerFlag and wpfakerDirFlag. Returns false if user cancelled.
-func selectWPfakerMode() (bool, error) {
+// selectFakerStudioMode runs the interactive FakerStudio edition + mode + worktree selection.
+// Sets fakerStudioFlag and fakerStudioDirFlag. Returns false if user cancelled.
+func selectFakerStudioMode() (bool, error) {
 	// Step 1: Edition selection
 	editionItems := []tui.MenuItem{
-		{Label: "Premium (~/Projects/wpfaker)", Key: "premium"},
-		{Label: "Free (~/Projects/wpfaker-free)", Key: "free"},
+		{Label: "Premium (~/Projects/fakerStudio)", Key: "premium"},
+		{Label: "Free (~/Projects/fakerStudio-free)", Key: "free"},
 		{Label: "None (test plugins only)", Key: "none"},
 	}
-	edMenu := tui.NewMenuModel("WPfaker Edition", editionItems)
+	edMenu := tui.NewMenuModel("FakerStudio Edition", editionItems)
 	p := tea.NewProgram(edMenu)
 	result, err := p.Run()
 	if err != nil {
@@ -63,7 +63,7 @@ func selectWPfakerMode() (bool, error) {
 		return false, nil
 	}
 	if edition == "none" {
-		wpfakerFlag = "none"
+		fakerStudioFlag = "none"
 		return true, nil
 	}
 
@@ -83,11 +83,11 @@ func selectWPfakerMode() (bool, error) {
 		return false, nil
 	}
 
-	// Combine edition + mode into WPfakerMode
+	// Combine edition + mode into FakerStudioMode
 	if edition == "premium" {
-		wpfakerFlag = modeChosen // "local" or "zip"
+		fakerStudioFlag = modeChosen // "local" or "zip"
 	} else {
-		wpfakerFlag = "free-" + modeChosen // "free-local" or "free-zip"
+		fakerStudioFlag = "free-" + modeChosen // "free-local" or "free-zip"
 	}
 
 	// Step 3: Worktree selection (only for local mode)
@@ -96,9 +96,9 @@ func selectWPfakerMode() (bool, error) {
 		if err != nil {
 			return false, err
 		}
-		repoPath := paths.WPfaker
+		repoPath := paths.FakerStudio
 		if edition == "free" {
-			repoPath = paths.WPfakerFree
+			repoPath = paths.FakerStudioFree
 		}
 		worktrees := paths.DetectWorktreesFor(repoPath)
 		if len(worktrees) > 1 {
@@ -122,7 +122,7 @@ func selectWPfakerMode() (bool, error) {
 			if wtChosen == "" {
 				return false, nil
 			}
-			wpfakerDirFlag = wtChosen
+			fakerStudioDirFlag = wtChosen
 		}
 	}
 
@@ -153,9 +153,9 @@ func runInteractive() error {
 		return nil
 	}
 
-	// WPfaker mode selection for up only (provision uses startProvisionFlow)
+	// FakerStudio mode selection for up only (provision uses startProvisionFlow)
 	if chosen == "up" {
-		ok, err := selectWPfakerMode()
+		ok, err := selectFakerStudioMode()
 		if err != nil {
 			return err
 		}
@@ -186,11 +186,11 @@ func runInteractive() error {
 	return nil
 }
 
-// startProvisionFlow runs the interactive provision prompts (WPfaker edition,
+// startProvisionFlow runs the interactive provision prompts (FakerStudio edition,
 // mode, worktree selection, plugin selection) and then executes the provision command.
 func startProvisionFlow() error {
-	// WPfaker edition + mode + worktree selection
-	ok, err := selectWPfakerMode()
+	// FakerStudio edition + mode + worktree selection
+	ok, err := selectFakerStudioMode()
 	if err != nil {
 		return err
 	}
@@ -246,8 +246,8 @@ var provisionCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		mode := docker.WPfakerMode(wpfakerFlag)
-		steps := docker.ProvisionSteps(paths, mode, pluginsFlag, wpfakerDirFlag)
+		mode := docker.FakerStudioMode(fakerStudioFlag)
+		steps := docker.ProvisionSteps(paths, mode, pluginsFlag, fakerStudioDirFlag)
 		tuiSteps := make([]tui.Step, len(steps))
 		for i, s := range steps {
 			tuiSteps[i] = tui.Step{Name: s.Name, Fn: s.Fn}
@@ -276,10 +276,10 @@ var upCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		mode := docker.WPfakerMode(wpfakerFlag)
+		mode := docker.FakerStudioMode(fakerStudioFlag)
 		compose := docker.NewCompose(paths, mode)
-		if wpfakerDirFlag != "" {
-			compose.SetWPfakerDir(wpfakerDirFlag)
+		if fakerStudioDirFlag != "" {
+			compose.SetFakerStudioDir(fakerStudioDirFlag)
 		}
 
 		steps := []tui.Step{
@@ -310,7 +310,7 @@ var downCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		compose := docker.NewCompose(paths, docker.WPfakerNone)
+		compose := docker.NewCompose(paths, docker.FakerStudioNone)
 		_, err = compose.Down()
 		if err != nil {
 			return err
@@ -383,7 +383,7 @@ var destroyCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		compose := docker.NewCompose(paths, docker.WPfakerNone)
+		compose := docker.NewCompose(paths, docker.FakerStudioNone)
 		_, err = compose.Destroy()
 		if err != nil {
 			return err
@@ -405,7 +405,7 @@ var destroyCmd = &cobra.Command{
 			return nil
 		}
 
-		// Jump into the provision flow (WPfaker edition → mode → worktree → plugins → provision)
+		// Jump into the provision flow (FakerStudio edition → mode → worktree → plugins → provision)
 		return startProvisionFlow()
 	},
 }
@@ -419,7 +419,7 @@ var statusCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		compose := docker.NewCompose(paths, docker.WPfakerNone)
+		compose := docker.NewCompose(paths, docker.FakerStudioNone)
 		ps, err := compose.Ps()
 		if err != nil {
 			return err
@@ -445,7 +445,7 @@ var logsCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		compose := docker.NewCompose(paths, docker.WPfakerNone)
+		compose := docker.NewCompose(paths, docker.FakerStudioNone)
 		return compose.Logs()
 	},
 }

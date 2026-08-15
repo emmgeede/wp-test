@@ -317,20 +317,20 @@ section "Task 9: Verify final plugin state"
 
 echo "Selected plugins are already active from Task 3."
 
-# Install WPfaker based on WPFAKER env var
-case "${WPFAKER:-}" in
+# Install FakerStudio based on FAKER_STUDIO env var
+case "${FAKER_STUDIO:-}" in
     local)
-        echo "Activating WPfaker Premium (local mount)..."
-        $WP plugin activate wpfaker && echo "  → Activated wpfaker (local)"
+        echo "Activating FakerStudio Premium (local mount)..."
+        $WP plugin activate faker-studio && echo "  → Activated faker-studio (local)"
         ;;
     zip)
-        echo "Installing WPfaker Premium from zip..."
-        WPFAKER_ZIP=$(ls -t /home/emmgee/Projects/wpfaker/dist/wpfaker-*.zip 2>/dev/null | head -1)
-        if [ -z "$WPFAKER_ZIP" ]; then
-            echo "  ✗ No zip found in ~/Projects/wpfaker/dist/ — run 'npm run build' in wpfaker first"
+        echo "Installing FakerStudio Premium from zip..."
+        FAKER_STUDIO_ZIP=$(ls -t /home/mg/ownCloud/30-39-Business/31-Projects/31.11-Faker-Studio/dist/faker-studio-*.zip 2>/dev/null | head -1)
+        if [ -z "$FAKER_STUDIO_ZIP" ]; then
+            echo "  ✗ No zip found in dist/ — run './scripts/release.sh' in the Faker Studio Premium repo first"
         else
-            docker cp "$WPFAKER_ZIP" wpt-wordpress:/tmp/wpfaker.zip
-            $WP plugin install /tmp/wpfaker.zip --activate --force && echo "  → Installed wpfaker from $(basename "$WPFAKER_ZIP")"
+            docker cp "$FAKER_STUDIO_ZIP" wpt-wordpress:/tmp/faker-studio.zip
+            $WP plugin install /tmp/faker-studio.zip --activate --force && echo "  → Installed faker-studio from $(basename "$FAKER_STUDIO_ZIP")"
         fi
         ;;
     free-local)
@@ -339,16 +339,16 @@ case "${WPFAKER:-}" in
         ;;
     free-zip)
         echo "Installing Faker Studio Lite from zip..."
-        WPFAKER_ZIP=$(ls -t /home/mg/ownCloud/30-39-Business/31-Projects/31.11-WPFaker/wpfaker-free/dist/faker-studio-lite-*.zip 2>/dev/null | head -1)
-        if [ -z "$WPFAKER_ZIP" ]; then
-            echo "  ✗ No zip found in wpfaker-free/dist/ — run 'npm run build' in wpfaker-free first"
+        FAKER_STUDIO_ZIP=$(ls -t /home/mg/ownCloud/30-39-Business/31-Projects/31.11-Faker-Studio/faker-studio-lite/dist/faker-studio-lite-*.zip 2>/dev/null | head -1)
+        if [ -z "$FAKER_STUDIO_ZIP" ]; then
+            echo "  ✗ No zip found in faker-studio-lite/dist/ — run 'npm run build' in faker-studio-lite first"
         else
-            docker cp "$WPFAKER_ZIP" wpt-wordpress:/tmp/faker-studio-lite.zip
-            $WP plugin install /tmp/faker-studio-lite.zip --activate --force && echo "  → Installed faker-studio-lite from $(basename "$WPFAKER_ZIP")"
+            docker cp "$FAKER_STUDIO_ZIP" wpt-wordpress:/tmp/faker-studio-lite.zip
+            $WP plugin install /tmp/faker-studio-lite.zip --activate --force && echo "  → Installed faker-studio-lite from $(basename "$FAKER_STUDIO_ZIP")"
         fi
         ;;
     *)
-        echo "No WPfaker requested"
+        echo "No FakerStudio requested"
         ;;
 esac
 
@@ -362,4 +362,4 @@ section "Provisioning complete"
 echo "Active plugins:"
 $WP plugin list --status=active --fields=name,version --format=table
 echo ""
-echo "Done! WordPress is ready at http://wpfaker-test.dv:8089"
+echo "Done! WordPress is ready at http://faker-studio.dv"

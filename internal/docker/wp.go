@@ -77,14 +77,14 @@ func PluginList() (string, error) {
 	return WP("plugin", "list", "--status=active", "--format=table")
 }
 
-// InstallWPfakerFromZip copies the latest zip into the container and installs it.
-func InstallWPfakerFromZip(wpfakerDir string) (string, error) {
-	return installPluginZip(wpfakerDir, "wpfaker-*.zip")
+// InstallFakerStudioFromZip copies the latest zip into the container and installs it.
+func InstallFakerStudioFromZip(fakerStudioDir string) (string, error) {
+	return installPluginZip(fakerStudioDir, "fakerStudio-*.zip")
 }
 
-// InstallWPfakerFreeFromZip copies the latest free zip into the container and installs it.
-func InstallWPfakerFreeFromZip(wpfakerFreeDir string) (string, error) {
-	return installPluginZip(wpfakerFreeDir, "faker-studio-lite-*.zip")
+// InstallFakerStudioFreeFromZip copies the latest free zip into the container and installs it.
+func InstallFakerStudioFreeFromZip(fakerStudioFreeDir string) (string, error) {
+	return installPluginZip(fakerStudioFreeDir, "faker-studio-lite-*.zip")
 }
 
 func installPluginZip(dir, pattern string) (string, error) {

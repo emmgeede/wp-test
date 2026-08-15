@@ -8,20 +8,20 @@ WP = docker exec wpt-wordpress wp --allow-root --path=/var/www/html
 MYSQLDUMP = docker exec wpt-wordpress mysqldump --skip-ssl -h db -u wordpress -pwordpress wordpress
 MYSQL = docker exec -i wpt-wordpress mysql --skip-ssl -h db -u wordpress -pwordpress wordpress
 
-# WPfaker mode: local | zip | (empty = none)
-WPFAKER ?=
+# FakerStudio mode: local | zip | (empty = none)
+FAKER_STUDIO ?=
 
-# Compose files — add wpfaker override when WPFAKER=local
+# Compose files — add fakerStudio override when FAKER_STUDIO=local
 COMPOSE_FILES = -f docker-compose.yml
-ifeq ($(WPFAKER),local)
-  COMPOSE_FILES += -f docker-compose.wpfaker.yml
+ifeq ($(FAKER_STUDIO),local)
+  COMPOSE_FILES += -f docker-compose.faker-studio.yml
 endif
 
 # Start containers (copy Blueprint → Docker first)
 up:
 	@mkdir -p $(DOCKER_DIR) $(SNAPSHOT_DIR)
 	@cp -a $(BLUEPRINT_DIR)/docker-compose.yml $(DOCKER_DIR)/
-	@cp -a $(BLUEPRINT_DIR)/docker-compose.wpfaker.yml $(DOCKER_DIR)/
+	@cp -a $(BLUEPRINT_DIR)/docker-compose.faker-studio.yml $(DOCKER_DIR)/
 	@cp -a $(BLUEPRINT_DIR)/Caddyfile $(DOCKER_DIR)/
 	@cp -a $(BLUEPRINT_DIR)/wp-setup.sh $(DOCKER_DIR)/
 	@cp -a $(BLUEPRINT_DIR)/php-uploads.ini $(DOCKER_DIR)/
@@ -29,7 +29,7 @@ up:
 	@cd $(DOCKER_DIR) && docker compose $(COMPOSE_FILES) up -d
 	@echo "Waiting for WordPress setup..."
 	@until $(WP) core is-installed 2>/dev/null; do sleep 2; done
-	@echo "WordPress is ready at http://faker-studio-test.dv:8089"
+	@echo "WordPress is ready at http://faker-studio.dv"
 
 # Stop containers (keep volumes)
 down:
@@ -37,7 +37,7 @@ down:
 
 # Install plugins, import schemas, create golden snapshot
 provision: up
-	@WPFAKER=$(WPFAKER) bash $(BLUEPRINT_DIR)/provision.sh
+	@FAKER_STUDIO=$(FAKER_STUDIO) bash $(BLUEPRINT_DIR)/provision.sh
 	@$(MAKE) snapshot
 	@echo "Provisioning complete. Golden snapshot saved."
 

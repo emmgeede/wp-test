@@ -35,7 +35,7 @@ if ! $WP core is-installed 2>/dev/null; then
     echo "Installing WordPress..."
     $WP core install \
         --url="http://faker-studio.dv" \
-        --title="WPfaker Test" \
+        --title="FakerStudio Test" \
         --admin_user=admin \
         --admin_password=admin \
         --admin_email=admin@faker-studio.dv \

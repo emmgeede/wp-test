@@ -1,0 +1,8 @@
+# Override: mount local Faker Studio (Premium) dev build into containers
+services:
+  wordpress:
+    volumes:
+      - /home/mg/ownCloud/30-39-Business/31-Projects/31.11-Faker-Studio:/var/www/html/wp-content/plugins/faker-studio
+  caddy:
+    volumes:
+      - /home/mg/ownCloud/30-39-Business/31-Projects/31.11-Faker-Studio:/var/www/html/wp-content/plugins/faker-studio:ro

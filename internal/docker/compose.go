@@ -10,31 +10,31 @@ import (
 	"github.com/emmgeede/wp-test/internal/config"
 )
 
-// WPfakerMode controls how WPfaker is installed.
-type WPfakerMode string
+// FakerStudioMode controls how FakerStudio is installed.
+type FakerStudioMode string
 
 const (
-	WPfakerNone      WPfakerMode = "none"
-	WPfakerLocal     WPfakerMode = "local"
-	WPfakerZip       WPfakerMode = "zip"
-	WPfakerFreeLocal WPfakerMode = "free-local"
-	WPfakerFreeZip   WPfakerMode = "free-zip"
+	FakerStudioNone      FakerStudioMode = "none"
+	FakerStudioLocal     FakerStudioMode = "local"
+	FakerStudioZip       FakerStudioMode = "zip"
+	FakerStudioFreeLocal FakerStudioMode = "free-local"
+	FakerStudioFreeZip   FakerStudioMode = "free-zip"
 )
 
 // Compose runs docker compose commands in the Docker/ directory.
 type Compose struct {
 	paths      *config.Paths
-	mode       WPfakerMode
-	wpfakerDir string // absolute path to WPfaker source (for local mode)
+	mode       FakerStudioMode
+	fakerStudioDir string // absolute path to FakerStudio source (for local mode)
 	plugins    string // comma-separated list of selected plugins
 }
 
-func NewCompose(paths *config.Paths, mode WPfakerMode) *Compose {
-	dir := paths.WPfaker
-	if mode == WPfakerFreeLocal || mode == WPfakerFreeZip {
-		dir = paths.WPfakerFree
+func NewCompose(paths *config.Paths, mode FakerStudioMode) *Compose {
+	dir := paths.FakerStudio
+	if mode == FakerStudioFreeLocal || mode == FakerStudioFreeZip {
+		dir = paths.FakerStudioFree
 	}
-	return &Compose{paths: paths, mode: mode, wpfakerDir: dir}
+	return &Compose{paths: paths, mode: mode, fakerStudioDir: dir}
 }
 
 // SetPlugins sets the selected plugins for filtering volume mounts.
@@ -42,19 +42,19 @@ func (c *Compose) SetPlugins(plugins string) {
 	c.plugins = plugins
 }
 
-// SetWPfakerDir overrides the WPfaker source directory (for worktree support).
-func (c *Compose) SetWPfakerDir(dir string) {
-	c.wpfakerDir = dir
+// SetFakerStudioDir overrides the FakerStudio source directory (for worktree support).
+func (c *Compose) SetFakerStudioDir(dir string) {
+	c.fakerStudioDir = dir
 }
 
 // composeArgs returns the -f flags for docker compose.
 func (c *Compose) composeArgs() []string {
 	args := []string{"-f", "docker-compose.yml"}
 	switch c.mode {
-	case WPfakerLocal:
-		args = append(args, "-f", "docker-compose.wpfaker.yml")
-	case WPfakerFreeLocal:
-		args = append(args, "-f", "docker-compose.wpfaker-free.yml")
+	case FakerStudioLocal:
+		args = append(args, "-f", "docker-compose.faker-studio.yml")
+	case FakerStudioFreeLocal:
+		args = append(args, "-f", "docker-compose.faker-studio-lite.yml")
 	}
 	return args
 }
@@ -85,15 +85,15 @@ var pluginVolumeDirs = map[string]string{
 
 // CopyBlueprint copies Blueprint/ files to Docker/.
 // Filters docker-compose.yml to only mount selected plugin volumes.
-// For local mode, rewrites the WPfaker mount path in docker-compose.wpfaker.yml.
+// For local mode, rewrites the FakerStudio mount path in docker-compose.faker-studio.yml.
 func (c *Compose) CopyBlueprint() error {
 	if err := os.MkdirAll(c.paths.Docker, 0o755); err != nil {
 		return err
 	}
 	files := []string{
 		"docker-compose.yml",
-		"docker-compose.wpfaker.yml",
-		"docker-compose.wpfaker-free.yml",
+		"docker-compose.faker-studio.yml",
+		"docker-compose.faker-studio-lite.yml",
 		"Caddyfile",
 		"wp-setup.sh",
 		"php-uploads.ini",
@@ -106,12 +106,12 @@ func (c *Compose) CopyBlueprint() error {
 		if err != nil {
 			return fmt.Errorf("read %s: %w", f, err)
 		}
-		// Rewrite WPfaker mount path if using a non-default directory
-		if f == "docker-compose.wpfaker.yml" && c.mode == WPfakerLocal && c.wpfakerDir != c.paths.WPfaker {
-			data = []byte(strings.ReplaceAll(string(data), "../../wpfaker", c.wpfakerDir))
+		// Rewrite FakerStudio mount path if using a non-default directory
+		if f == "docker-compose.faker-studio.yml" && c.mode == FakerStudioLocal && c.fakerStudioDir != c.paths.FakerStudio {
+			data = []byte(strings.ReplaceAll(string(data), "../../fakerStudio", c.fakerStudioDir))
 		}
-		if f == "docker-compose.wpfaker-free.yml" && c.mode == WPfakerFreeLocal && c.wpfakerDir != c.paths.WPfakerFree {
-			data = []byte(strings.ReplaceAll(string(data), c.paths.WPfakerFree, c.wpfakerDir))
+		if f == "docker-compose.faker-studio-lite.yml" && c.mode == FakerStudioFreeLocal && c.fakerStudioDir != c.paths.FakerStudioFree {
+			data = []byte(strings.ReplaceAll(string(data), c.paths.FakerStudioFree, c.fakerStudioDir))
 		}
 		// Filter plugin volume mounts based on selected plugins
 		if f == "docker-compose.yml" && c.plugins != "" {

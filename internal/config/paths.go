@@ -53,16 +53,12 @@ type Paths struct {
 	Docker      string // Docker/ runtime directory
 	Snapshots   string // snapshots/ directory
 	Golden      string // snapshots/golden.sql.gz
-	WPfaker     string // ~/Projects/wpfaker (local dev)
-	WPfakerFree string // ~/Projects/wpfaker-free (local dev)
+	FakerStudio     string // /home/mg/ownCloud/.../31.11-Faker-Studio (local dev)
+	FakerStudioFree string // /home/mg/ownCloud/.../31.11-Faker-Studio/faker-studio-lite (local dev)
 }
 
 func NewPaths() (*Paths, error) {
 	root, err := ProjectRoot()
-	if err != nil {
-		return nil, err
-	}
-	home, err := os.UserHomeDir()
 	if err != nil {
 		return nil, err
 	}
@@ -72,8 +68,8 @@ func NewPaths() (*Paths, error) {
 		Docker:      filepath.Join(root, "Docker"),
 		Snapshots:   filepath.Join(root, "snapshots"),
 		Golden:      filepath.Join(root, "snapshots", "golden.sql.gz"),
-		WPfaker:     filepath.Join(home, "Projects", "wpfaker"),
-		WPfakerFree: "/home/mg/ownCloud/30-39-Business/31-Projects/31.11-WPFaker/wpfaker-free",
+		FakerStudio:     "/home/mg/ownCloud/30-39-Business/31-Projects/31.11-Faker-Studio",
+		FakerStudioFree: "/home/mg/ownCloud/30-39-Business/31-Projects/31.11-Faker-Studio/faker-studio-lite",
 	}, nil
 }
 
@@ -90,10 +86,10 @@ type Worktree struct {
 	Branch string // branch name (e.g. "master", "feature/foo")
 }
 
-// DetectWorktrees returns all git worktrees for the WPfaker (premium) repo.
+// DetectWorktrees returns all git worktrees for the FakerStudio (premium) repo.
 // The main worktree is always first. Returns nil if git fails.
 func (p *Paths) DetectWorktrees() []Worktree {
-	return p.DetectWorktreesFor(p.WPfaker)
+	return p.DetectWorktreesFor(p.FakerStudio)
 }
 
 // DetectWorktreesFor returns all git worktrees for the given repo path.

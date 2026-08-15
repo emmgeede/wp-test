@@ -17,11 +17,11 @@ type ProvisionStep struct {
 }
 
 // ProvisionSteps returns the ordered list of provisioning steps.
-// wpfakerDir overrides the WPfaker source directory (for worktree support).
-func ProvisionSteps(paths *config.Paths, mode WPfakerMode, plugins string, wpfakerDir string) []ProvisionStep {
+// fakerStudioDir overrides the FakerStudio source directory (for worktree support).
+func ProvisionSteps(paths *config.Paths, mode FakerStudioMode, plugins string, fakerStudioDir string) []ProvisionStep {
 	compose := NewCompose(paths, mode)
-	if wpfakerDir != "" {
-		compose.SetWPfakerDir(wpfakerDir)
+	if fakerStudioDir != "" {
+		compose.SetFakerStudioDir(fakerStudioDir)
 	}
 	compose.SetPlugins(plugins)
 	steps := []ProvisionStep{
@@ -58,7 +58,7 @@ func ProvisionSteps(paths *config.Paths, mode WPfakerMode, plugins string, wpfak
 			Fn: func() error {
 				cmd := exec.Command("bash", filepath.Join(paths.Blueprint, "provision.sh"))
 				cmd.Env = append(os.Environ(),
-				fmt.Sprintf("WPFAKER=%s", mode),
+				fmt.Sprintf("FAKER_STUDIO=%s", mode),
 				fmt.Sprintf("ACTIVATE_PLUGINS=%s", plugins),
 			)
 				out, err := cmd.CombinedOutput()
